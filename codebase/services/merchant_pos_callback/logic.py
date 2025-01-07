@@ -1,7 +1,8 @@
 from services.merchant_pos_callback.rqrsp import MerchantPosCallbackRequest, MerchantPosCallbackResponse
+from util.service_config_base import ServiceConfig
 
 def handle_merchant_pos_callback_request(
-    client_id: int, 
+    config: ServiceConfig,
     rq: MerchantPosCallbackRequest
 ):
     return MerchantPosCallbackResponse()

@@ -1,9 +1,7 @@
 from pydantic import BaseModel
 
-class IssBankCallbackRequest(BaseModel):
-    # TO DO: define request fields here
+class IssuingBankCallbackRequest(BaseModel):
     pass
 
-class IssBankCallbackResponse(BaseModel):
-    # TO DO: define response fields here
-    pass
+class IssuingBankCallbackResponse(BaseModel):
+    rq: IssuingBankCallbackRequest

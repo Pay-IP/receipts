@@ -8,6 +8,7 @@ def handle_issuing_bank_new_payment_request(
     rq: IssuingBankNewPaymentRequest
 ):
 
+    
     platform_new_pmt_rsp = PlatformNewPaymentClient().post(
         PlatformNewPaymentRequest(
             currency=rq.currency,
