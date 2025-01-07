@@ -3,7 +3,7 @@ from services.platform_new_receipt.client import PlatformNewReceiptClient
 from services.platform_new_receipt.rqrsp import PlatformNewReceiptRequest
 from services.pmt_proc_new_pmt.client import PaymentProcessorNewPaymentClient
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest
-from util.service_config_base import ServiceConfig
+from util.service.service_config_base import ServiceConfig
 
 def handle_merchant_pos_new_checkout_request(
     config: ServiceConfig, 

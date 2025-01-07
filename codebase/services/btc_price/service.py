@@ -1,12 +1,9 @@
-from typing import Optional
 from services.btc_price.logic import configure_logic, handle_request, rq_received_logevent
 from fastapi import FastAPI
 
-from model.logevent import HealthChecked
 from util.coinbase import CoinBaseClient
-from util.service_base import register_healthcheck_endpoint
-from util.structured_logging import log_event
-from util.service import request_handler
+from util.service.service_base import register_healthcheck_endpoint
+from util.service.service_base import request_handler
 
 api = FastAPI()
 

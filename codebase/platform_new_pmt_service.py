@@ -1,7 +1,7 @@
-from util.service_base import launch_uvicorn_server
-from model.common import Service
+from services.platform_new_pmt.definition import platform_new_payment_service_definition
+from util.service.service_base import start_service
 
 if __name__ == '__main__':
-    launch_uvicorn_server(
-        service=Service.PLATFORM_NEW_PMT
+    start_service(
+        definition=platform_new_payment_service_definition()
     )

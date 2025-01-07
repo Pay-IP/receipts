@@ -7,7 +7,7 @@ from services.merchant_pos_new_checkout.client import MerchantPosNewCheckoutClie
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestLine
 from services.trigger.rqrsp import TriggerRequest
 from model.orm.write_model.merchant_write_model import SKU, Currency
-from util.service_config_base import ServiceConfig
+from util.service.service_config_base import ServiceConfig
 
 def random_merchant_pos_new_checkout_request(
     write_model_db_engine: Engine,

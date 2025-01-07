@@ -40,6 +40,7 @@ class Service(Enum):
     
     PLATFORM_NEW_PMT = 'platform_new_pmt'
     PLATFORM_NEW_RECEIPT = 'platform_new_receipt'
+    PLATFORM_MATCHING = 'platform_matching'
 
     TRIGGER = 'trigger'
 

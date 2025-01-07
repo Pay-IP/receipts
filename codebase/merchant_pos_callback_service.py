@@ -1,7 +1,7 @@
-from util.service_base import launch_uvicorn_server
-from model.common import Service
+from services.merchant_pos_callback.definition import merchant_pos_callback_service_definition
+from util.service.service_base import start_service
 
 if __name__ == '__main__':
-    launch_uvicorn_server(
-        service=Service.MERCHANT_POS_CALLBACK
+    start_service(
+        definition=merchant_pos_callback_service_definition()
     )

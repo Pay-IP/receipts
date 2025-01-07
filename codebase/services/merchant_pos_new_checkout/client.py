@@ -1,7 +1,7 @@
 from model.common import Endpoint, Service
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutResponse
 from util.env import service_endpoint_from_env
-from util.service_client_base import ServiceClientBase
+from util.service.service_client_base import ServiceClientBase
 
 class MerchantPosNewCheckoutClient(ServiceClientBase):
 

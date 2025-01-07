@@ -99,8 +99,8 @@ services:
       - queue
       - read_model
       - migration
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
     volumes:
       - ./codebase:/application
 
@@ -144,8 +144,8 @@ services:
       - migration
     volumes:
       - ./codebase:/application
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
 
   pmt_proc_new_pmt:
     container_name: ${PMT_PROC_NEW_PMT_HOST}
@@ -166,8 +166,8 @@ services:
       - iss_bank_new_pmt
     volumes:
       - ./codebase:/application
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
 
   iss_bank_new_pmt:
     container_name: ${ISS_BANK_NEW_PMT_HOST}
@@ -188,8 +188,8 @@ services:
       # - platform_new_payment
     volumes:
       - ./codebase:/application
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
 
   iss_bank_callback:
     container_name: ${ISS_BANK_CALLBACK_HOST}
@@ -209,8 +209,8 @@ services:
       - migration
     volumes:
       - ./codebase:/application
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
 
   platform_new_pmt:
     container_name: ${PLATFORM_NEW_PMT_HOST}
@@ -230,8 +230,8 @@ services:
       - migration
     volumes:
       - ./codebase:/application
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
 
   platform_new_receipt:
     container_name: ${PLATFORM_NEW_RECEIPT_HOST}
@@ -251,8 +251,8 @@ services:
       - migration
     volumes:
       - ./codebase:/application
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
 
   trigger:
     container_name: ${TRIGGER_HOST}

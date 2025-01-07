@@ -1,7 +1,7 @@
 from services.iss_bank_new_pmt.client import IssuingBankNewCustomerPaymentClient
 from services.iss_bank_new_pmt.rqrsp import IssuingBankNewPaymentRequest, IssuingBankNewPaymentResponse
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest, PaymentProcessorNewPaymentResponse
-from util.service_config_base import ServiceConfig
+from util.service.service_config_base import ServiceConfig
 
 def handle_payment_processor_new_customer_payment_request(
     config: ServiceConfig, 

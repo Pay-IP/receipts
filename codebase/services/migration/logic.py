@@ -3,6 +3,7 @@ from model.logevent import DatabaseAlreadyMigrated, DatabaseMigrated, DatabaseMi
 from model.migrations.seed_data.merchant_seed_data import seed_merchant_write_model_data
 from util.db import get_tested_database_engine
 from util.env import database_endpoint_from_env
+from util.service.service_config_base import ServiceConfig
 from util.structured_logging import log_event
 from yoyo import read_migrations, get_backend
 from model.common import DatabaseEndPoint
@@ -61,7 +62,7 @@ def migrate_and_seed_read_model():
     read_model_engine = get_read_model_db_engine()
     migrate(read_model_db_endpoint, 'model/migrations/read_model')
 
-def before_launching_migration_server():
+def before_launching_migration_server(service_config: ServiceConfig):
 
     migrate_and_seed_write_model()
     migrate_and_seed_read_model()
