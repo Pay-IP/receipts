@@ -1,11 +1,10 @@
 from model.common import Service
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest
 from util.service_base import register_healthcheck_endpoint
-from util.structured_logging import configure_structured_logging, log_event
+from util.structured_logging import configure_structured_logging
 from fastapi import FastAPI
 from util.service import request_handler
 from services.pmt_proc_new_pmt.logic import handle_payment_processor_new_customer_payment_request
-from model.logevent import HealthChecked
 
 def api():
 

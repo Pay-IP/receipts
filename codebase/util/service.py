@@ -19,12 +19,14 @@ def request_handler(TRqModel, callback: Callable):
 
         try:
             log_event(RequestReceivedLogEvent(
+                rq_type=TRqModel.__name__,
                 rq=str(rq)
             ))
 
             rsp = callback(_service_config, rq)
 
             log_event(ResponseReturnedLogEvent(
+                rsp_type=rsp.__class__.__name__,
                 rsp=str(rsp)
             ))
 
@@ -35,7 +37,8 @@ def request_handler(TRqModel, callback: Callable):
             print(trace)
             log_event( 
                 RequestFailed(
-                    request=TRqModel.__name__,
+                    request_type=TRqModel.__name__,
+                    request=str(rq),
                     error=trace,
                     reference=str(error_reference)
                 )

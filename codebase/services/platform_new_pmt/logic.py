@@ -1,11 +1,11 @@
-from services.iss_bank_new_pmt.client import IssuingBankNewCustomerPaymentClient
 from services.platform_new_pmt.rqrsp import PlatformNewPaymentRequest, PlatformNewPaymentResponse
+from util.service_config_base import ServiceConfig
 
 def handle_platform_new_payment_request(
-    client_id: int, 
+    config: ServiceConfig,
     rq: PlatformNewPaymentRequest
 ):
-    
-    iss_bank_new_pmt_service = IssuingBankNewCustomerPaymentClient()
 
-    return PlatformNewPaymentResponse()
+    return PlatformNewPaymentResponse(
+        rq=rq
+    )

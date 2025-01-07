@@ -1,15 +1,8 @@
-import datetime
-import uuid
-from model.common import SUPPORTED_CURRENCIES
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
 class PlatformNewPaymentRequest(BaseModel):
-    pass
-
-class PlatformPaymentExport(BaseModel):
-    id: uuid.UUID
-    created_at: datetime.datetime
-    pass
+    currency: str
+    currency_amount: int
 
 class PlatformNewPaymentResponse(BaseModel):
-    payment: PlatformPaymentExport
+    rq: PlatformNewPaymentRequest

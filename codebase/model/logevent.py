@@ -8,9 +8,11 @@ class LoggingTag(Enum):
 
 
 class RequestReceivedLogEvent(BaseModel):
+    rq_type: str
     rq: str
 
 class ResponseReturnedLogEvent(BaseModel):
+    rsp_type: str
     rsp: str
 
 class CreateBuyOrderRequestReceived(BaseModel):
@@ -23,6 +25,7 @@ class CreateBuyOrderResponseReturned(BaseModel):
     external_id: str
 
 class RequestFailed(BaseModel):
+    request_type: str
     request: str
     error: str
     reference: str
