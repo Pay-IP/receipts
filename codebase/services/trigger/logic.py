@@ -1,18 +1,11 @@
-
-import math
 import random
-from model.common import Service
-from services.merchant_pos_new_checkout.client import MerchantPosNewCheckoutClient
-from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestLine
-from services.trigger.rqrsp import TriggerRequest
-from util.db import get_tested_database_engine
-from util.env import database_endpoint_from_env, endpoint_from_env
 
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.expression import select
 
-
+from services.merchant_pos_new_checkout.client import MerchantPosNewCheckoutClient
+from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestLine
+from services.trigger.rqrsp import TriggerRequest
 from model.orm.write_model.merchant_write_model import SKU, Currency
 from util.service_config_base import ServiceConfig
 
@@ -22,8 +15,8 @@ def random_merchant_pos_new_checkout_request(
     sales_tax_percent = 14.0
 ) -> MerchantPosNewCheckoutRequest:
     
-    currencies = None
-    skus = None
+    currencies: list[Currency] = None
+    skus: list[SKU] = None
 
     # Example query
     #user = session.query(User).filter(User.email == "john.doe@example.com").first()
@@ -31,10 +24,7 @@ def random_merchant_pos_new_checkout_request(
     with Session(write_model_db_engine) as session:
 
         currencies = session.query(Currency).all()
-        print(currencies)
-
         skus = session.query(SKU).all()
-        print(skus)
 
     lines = []
 
@@ -71,6 +61,4 @@ def handle_trigger_merchant_pos_new_checkout_request(config: ServiceConfig, rq: 
         write_model_db_engine=config.write_model_db_engine()
     )
 
-    return MerchantPosNewCheckoutClient(
-        endpoint_from_env(Service.MERCHANT_POS_NEW_CHECKOUT)
-    ).post(merchant_pos_checkout_rq)
+    return MerchantPosNewCheckoutClient().post(merchant_pos_checkout_rq)

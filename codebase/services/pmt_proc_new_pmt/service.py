@@ -1,5 +1,5 @@
 from model.common import Service
-from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewCustomerPaymentRequest
+from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest
 from util.service_base import register_healthcheck_endpoint
 from util.structured_logging import configure_structured_logging, log_event
 from fastapi import FastAPI
@@ -15,9 +15,9 @@ def api():
     register_healthcheck_endpoint(api)
 
     @api.post("/")
-    def new_payment(rq: PaymentProcessorNewCustomerPaymentRequest):
+    def new_payment(rq: PaymentProcessorNewPaymentRequest):
         return request_handler(
-            PaymentProcessorNewCustomerPaymentRequest,
+            PaymentProcessorNewPaymentRequest,
             handle_payment_processor_new_customer_payment_request
         )(rq)
 

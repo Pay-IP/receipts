@@ -45,6 +45,9 @@ def endpoint_from_env(prefix, no_path: bool = True):
         path=env_str(f'{prefix_str}_PATH') if not no_path else None
     )
 
+def service_endpoint_from_env(service: Service):
+    return endpoint_from_env(service.value)
+
 def queue_endpoint_from_env(prefix: str, queue: Queue):
     
     prefix_str = prefix_str_from_prefix(prefix)

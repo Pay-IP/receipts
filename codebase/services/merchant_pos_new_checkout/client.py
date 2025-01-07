@@ -1,8 +1,9 @@
-from model.common import Endpoint
+from model.common import Endpoint, Service
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutResponse
+from util.env import service_endpoint_from_env
 from util.service_client_base import ServiceClientBase
 
 class MerchantPosNewCheckoutClient(ServiceClientBase):
 
-    def __init__(self, endpoint: Endpoint = None):
+    def __init__(self, endpoint: Endpoint = service_endpoint_from_env(Service.MERCHANT_POS_NEW_CHECKOUT)):
         super().__init__(endpoint, MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutResponse)
