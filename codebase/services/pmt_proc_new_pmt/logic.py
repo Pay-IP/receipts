@@ -10,7 +10,7 @@ def handle_payment_processor_new_customer_payment_request(
 
     iss_bank_new_pmt_rsp: IssuingBankNewPaymentResponse = IssuingBankNewCustomerPaymentClient().post(
         IssuingBankNewPaymentRequest(
-            currency=rq.currency.value,
+            currency=rq.currency,
             currency_amount=rq.currency_amt
         )
     )

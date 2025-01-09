@@ -7,12 +7,7 @@ class Currency(WriteModelBase):
 
     id = Column(Integer, primary_key=True)
     iso3 = Column(String(3), nullable=False)
-    dp = Column(SMALLINT, nullable=False)
+    decimal_places = Column(SMALLINT, nullable=False)
 
     def __repr__(self):
-       return f'id {self.id}: {self.iso3} ({self.dp} DP)'
-    
-
-from model.object_model.common import SUPPORTED_CURRENCIES
-
-supported_currencies = ",".join([f'"{x}"' for x in SUPPORTED_CURRENCIES])
+       return f'id {self.id}: {self.iso3} ({self.decimal_places} DP)'

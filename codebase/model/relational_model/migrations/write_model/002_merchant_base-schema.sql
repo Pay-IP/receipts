@@ -1,18 +1,4 @@
 
--- currency
-
-CREATE TABLE merchant_currency (
-
-    id INTEGER GENERATED ALWAYS AS IDENTITY,
-        PRIMARY KEY(id),
-
-    iso3 NCHAR(3) NOT NULL UNIQUE,
-
-    decimal_places SMALLINT NOT NULL
-        CHECK ((decimal_places > 0) AND (decimal_places <= 8))
-);
-
-
 -- Client
 
 CREATE TABLE merchant_client (
@@ -63,7 +49,7 @@ CREATE TABLE merchant_invoice (
     currency_id INTEGER NOT NULL,
     CONSTRAINT fk_merchant_invoice_currency
         FOREIGN KEY(currency_id) 
-	    REFERENCES merchant_currency(id),
+	    REFERENCES currency(id),
 
     total_amount_before_tax INTEGER NOT NULL,
     sales_tax_amount INTEGER NOT NULL,
@@ -108,7 +94,7 @@ CREATE TABLE merchant_invoice_payment (
     currency_id INTEGER NOT NULL,
     CONSTRAINT fk_merchant_invoice_payment_currency
         FOREIGN KEY(currency_id) 
-	    REFERENCES merchant_currency(id),
+	    REFERENCES currency(id),
     currency_amount INTEGER NOT NULL,
 
     payment_processor_id INTEGER NOT NULL,

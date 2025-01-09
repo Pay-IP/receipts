@@ -1,12 +1,15 @@
 import traceback
 from model.object_model.core.endpoint import DatabaseEndPoint
 from model.object_model.core.logevent import DatabaseAlreadyMigrated, DatabaseMigrated, DatabaseMigrationExceptionOccurred, PendingDatabaseMigrationsDetected
-from model.object_model.write_model_seed_data.merchant import seed_merchant_write_model_data
 from util.db import get_tested_database_engine
 from util.env import database_endpoint_from_env
 from util.service.service_config_base import ServiceConfig
 from util.structured_logging import log_event
 from yoyo import read_migrations, get_backend
+
+
+from model.object_model.write_model_seed_data.common_base_schema import *
+from model.object_model.write_model_seed_data.merchant_base_schema import seed_merchant_base_schema
 
 write_model_db_endpoint = database_endpoint_from_env('WRITE_MODEL_DB')
 read_model_db_endpoint = database_endpoint_from_env('READ_MODEL_DB')
@@ -55,12 +58,15 @@ def get_read_model_db_engine():
 
 def migrate_and_seed_write_model():
     write_model_engine = get_write_model_db_engine()
-    migrate(write_model_db_endpoint, 'model/migrations/write_model')
-    seed_merchant_write_model_data(write_model_engine)
+    migrate(write_model_db_endpoint, 'model/relational_model/migrations/write_model')
+    
+    seed_common_base_schema(write_model_engine)
+    seed_merchant_base_schema(write_model_engine)
+
 
 def migrate_and_seed_read_model():
     read_model_engine = get_read_model_db_engine()
-    migrate(read_model_db_endpoint, 'model/migrations/read_model')
+    migrate(read_model_db_endpoint, 'model/relational_model/migrations/read_model')
 
 def before_launching_migration_server(service_config: ServiceConfig):
 
