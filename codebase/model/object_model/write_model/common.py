@@ -9,5 +9,9 @@ class Currency(WriteModelBase):
     iso3 = Column(String(3), nullable=False)
     decimal_places = Column(SMALLINT, nullable=False)
 
-    def __repr__(self):
-       return f'id {self.id}: {self.iso3} ({self.decimal_places} DP)'
+    # def __repr__(self):
+    #    return f'id {self.id}: {self.iso3} ({self.decimal_places} DP)'
+
+from psycopg2.extensions import register_adapter, AsIs
+for fk_class in [Currency]:
+    register_adapter(fk_class, lambda x: AsIs(f"'{x.id}'"))

@@ -1,4 +1,3 @@
-from model.object_model.common import BTC_RATE_PRECISION, BTC_RATE_SCALE
 from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.functions import func
@@ -23,7 +22,7 @@ class BuyOrder(WriteModelBase):
 
     currency_id = Column(ForeignKey('currency.id'), nullable=False)
     currency_amount = Column(DECIMAL(precision=12, scale=2), nullable=False)
-    btc_rate = Column(DECIMAL(precision=BTC_RATE_PRECISION, scale=BTC_RATE_SCALE), nullable=False)
+    btc_rate = Column(DECIMAL(precision=12, scale=2), nullable=False)
     btc_amount  = Column(DECIMAL(precision=11, scale=8), nullable=False)
 
 class BuyOrderIdempotenceCache(WriteModelBase):

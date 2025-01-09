@@ -1,10 +1,11 @@
+import uuid
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
 
-from model.object_model.write_model.merchant_write_model import SKU
+from model.object_model.write_model.merchant_write_model import SKU, PaymentProcessor
 
-def seed_merchant_base_schema(db_engine: Engine):
+def seed_merchant_skus(db_engine: Engine):
 
     seed_skus = [
         SKU(name="espresso", price=3000),
@@ -14,10 +15,7 @@ def seed_merchant_base_schema(db_engine: Engine):
     ]
 
     with Session(db_engine) as db_session:
-
         with db_session.begin():            
-
-            # SKUs
 
             existing_skus = db_session.execute(
                 select(SKU)
@@ -28,3 +26,31 @@ def seed_merchant_base_schema(db_engine: Engine):
                     db_session.add(sku)
             
             db_session.flush()
+
+def seed_merchant_payment_processors(db_engine: Engine):
+
+    payment_processors = [
+        PaymentProcessor(
+            name = 'Nedbank',
+            vostro_id = str(uuid.uuid4())
+        ),
+    ]
+
+    with Session(db_engine) as db_session:
+        with db_session.begin():            
+
+            existing_processors = db_session.execute(
+                select(PaymentProcessor)
+            ).scalars().all()
+
+            for processor in payment_processors:
+                if len([processor for processor in existing_processors if processor.name == processor.name]) == 0:
+                    db_session.add(processor)
+            
+            db_session.flush()
+
+
+def seed_merchant_base_schema(db_engine: Engine):
+
+    seed_merchant_skus(db_engine)
+    seed_merchant_payment_processors(db_engine)

@@ -5,7 +5,7 @@ from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 
 from services.merchant_pos_new_checkout.client import MerchantPosNewCheckoutClient
-from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestLine
+from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestItem
 from services.trigger.rqrsp import TriggerRequest
 from model.object_model.write_model.merchant_write_model import SKU
 from util.service.service_config_base import ServiceConfig
@@ -34,26 +34,23 @@ def random_merchant_pos_new_checkout_request(
         sku_count = random.randint(1, max_count_per_sku)
 
         lines.append(
-            MerchantPosNewCheckoutRequestLine(
+            MerchantPosNewCheckoutRequestItem(
                 sku_id = sku.id,
                 sku_count = sku_count,
-                currency_amount = sku.price * sku_count
+                # currency_amount = sku.price * sku_count
             )
         )
 
     currency = random.sample(currencies, 1)[0] 
 
-    total_amount_before_tax = sum([x.currency_amount for x in lines])
-    sales_tax_amount = round(total_amount_before_tax * sales_tax_percent / 100.0)
-    total_amount_after_tax = total_amount_before_tax + sales_tax_amount 
+    # total_amount_before_tax = sum([x.currency_amount for x in lines])
+    # sales_tax_amount = round(total_amount_before_tax * sales_tax_percent / 100.0)
+    # total_amount_after_tax = total_amount_before_tax + sales_tax_amount 
 
     return MerchantPosNewCheckoutRequest(
         client_id = None,    
-        lines = lines,
+        items = lines,
         currency = currency.iso3,
-        total_amount_before_tax = total_amount_before_tax,
-        sales_tax_amount = sales_tax_amount,
-        total_amount_after_tax = total_amount_after_tax,
     )
 
 def handle_trigger_merchant_pos_new_checkout_request(config: ServiceConfig, rq: TriggerRequest):

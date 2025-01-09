@@ -51,6 +51,8 @@ CREATE TABLE merchant_invoice (
         FOREIGN KEY(currency_id) 
 	    REFERENCES currency(id),
 
+    sales_tax_percent DECIMAL(10, 2),
+
     total_amount_before_tax INTEGER NOT NULL,
     sales_tax_amount INTEGER NOT NULL,
     total_amount_after_tax INTEGER NOT NULL
@@ -102,7 +104,9 @@ CREATE TABLE merchant_invoice_payment (
         FOREIGN KEY(payment_processor_id) 
 	    REFERENCES merchant_payment_processor(id), 
 
-    payment_processor_reference VARCHAR(254) NOT NULL
+    payment_processor_reference VARCHAR(254) NOT NULL,
+
+    successful BOOLEAN NOT NULL
 );
 
 
