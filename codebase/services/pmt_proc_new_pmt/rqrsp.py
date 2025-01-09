@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from model.common import Currency
+from model.object_model.write_model.payment_processor_write_model import Currency
 
 class PaymentProcessorNewPaymentRequest(BaseModel):
     currency: Currency

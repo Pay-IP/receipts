@@ -1,5 +1,5 @@
 from services.fetch_buy_orders.logic import configure_get_buy_orders, get_buy_orders_log_event, handle_get_buy_orders
-from model.logevent import HealthChecked
+from model.object_model.logevent import HealthChecked
 from util.service.service_base import register_healthcheck_endpoint
 from util.structured_logging import log_event
 from fastapi import FastAPI

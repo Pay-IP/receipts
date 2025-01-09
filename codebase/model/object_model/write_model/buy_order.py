@@ -1,4 +1,4 @@
-from model.common import BTC_RATE_PRECISION, BTC_RATE_SCALE
+from model.object_model.common import BTC_RATE_PRECISION, BTC_RATE_SCALE
 from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.sql.expression import text
 from sqlalchemy.sql.functions import func
@@ -6,7 +6,7 @@ from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import DECIMAL
 from sqlalchemy.dialects.postgresql import UUID
 
-from model.orm.write_model.write_model_base import WriteModelBase
+from model.object_model.core.write_model_base import WriteModelBase
 
 class BuyOrderRunningTotal(WriteModelBase):
     __tablename__ = 'buy_order_running_total'

@@ -9,7 +9,7 @@ from util.structured_logging import log_event
 from fastapi import FastAPI
 
 from services.create_buy_order.rqrsp import CreateBuyOrderRequest
-from model.logevent import HealthChecked
+from model.object_model.logevent import HealthChecked
 
 def configure_api(write_engine: Engine, q_publisher, btc_price_service: BtcPriceServiceClient):
     configure_logic(write_engine, q_publisher, btc_price_service)

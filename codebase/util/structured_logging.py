@@ -1,10 +1,10 @@
 import time
 from typing import Optional
+from model.object_model.core.logevent import LoggingTag
 from util.env import env_float, env_int, env_str
-import os, traceback
+import traceback
 from fluent import sender
-from model.logevent import LoggingTag
-from model.common import Service
+from model.object_model.core.service import Service
 from pydantic.main import BaseModel
 import inflection
 

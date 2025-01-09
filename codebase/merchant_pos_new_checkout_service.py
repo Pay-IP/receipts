@@ -1,4 +1,3 @@
-from model.common import Service
 from services.merchant_pos_new_checkout.definition import merchant_pos_new_checkout_service_definition
 from util.service.service_base import start_service
 

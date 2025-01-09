@@ -1,4 +1,3 @@
-from model.common import Service
 from services.migration.definition import migration_service_definition
 from util.service.service_base import start_service
 

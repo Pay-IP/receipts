@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String
 
-from model.orm.write_model.write_model_base import WriteModelBase
+from model.object_model.core.write_model_base import WriteModelBase
 
 class Client(WriteModelBase):
     __tablename__ = 'client'

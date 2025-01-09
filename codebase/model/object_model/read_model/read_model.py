@@ -1,11 +1,9 @@
+from model.object_model.core.common import BTC_RATE_PRECISION, BTC_RATE_SCALE
 from sqlalchemy import Column, Integer, DateTime
 from sqlalchemy.sql.sqltypes import DECIMAL, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import declarative_base
 
-from model.common import BTC_RATE_SCALE, BTC_RATE_PRECISION
-
-ReadModelBase = declarative_base()
+from model.object_model.core.read_model_base import ReadModelBase
 
 class BuyOrderReadModel(ReadModelBase):
     __tablename__ = 'buy_order_read_model'

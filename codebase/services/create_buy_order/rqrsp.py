@@ -1,7 +1,7 @@
 import datetime
 from uuid import UUID
 import uuid
-from model.common import MAX_BUY_ORDER_SIZE_EXCLUSIVE_ANY_CURRENCY_UNIT, SUPPORTED_CURRENCIES
+from model.object_model.common import MAX_BUY_ORDER_SIZE_EXCLUSIVE_ANY_CURRENCY_UNIT, SUPPORTED_CURRENCIES
 from pydantic import BaseModel, validator
 from decimal import Decimal
 

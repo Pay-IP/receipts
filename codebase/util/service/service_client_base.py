@@ -1,6 +1,6 @@
 import json
 from pydantic import BaseModel
-from model.common import Endpoint
+from model.object_model.core.endpoint import Endpoint
 from util.web import http_post, url_for_endpoint
 
 class ServiceClientBase:

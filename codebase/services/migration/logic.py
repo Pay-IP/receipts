@@ -1,12 +1,12 @@
 import traceback
-from model.logevent import DatabaseAlreadyMigrated, DatabaseMigrated, DatabaseMigrationExceptionOccurred, PendingDatabaseMigrationsDetected
-from model.migrations.seed_data.merchant_seed_data import seed_merchant_write_model_data
+from model.object_model.core.endpoint import DatabaseEndPoint
+from model.object_model.core.logevent import DatabaseAlreadyMigrated, DatabaseMigrated, DatabaseMigrationExceptionOccurred, PendingDatabaseMigrationsDetected
+from model.object_model.write_model_seed_data.merchant import seed_merchant_write_model_data
 from util.db import get_tested_database_engine
 from util.env import database_endpoint_from_env
 from util.service.service_config_base import ServiceConfig
 from util.structured_logging import log_event
 from yoyo import read_migrations, get_backend
-from model.common import DatabaseEndPoint
 
 write_model_db_endpoint = database_endpoint_from_env('WRITE_MODEL_DB')
 read_model_db_endpoint = database_endpoint_from_env('READ_MODEL_DB')

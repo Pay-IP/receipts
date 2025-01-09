@@ -3,7 +3,7 @@ from sqlalchemy.sql.functions import func
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 
-from model.orm.write_model.write_model_base import WriteModelBase
+from model.object_model.core.write_model_base import WriteModelBase
 
 class Currency(WriteModelBase):
     __tablename__ = 'merchant_currency'

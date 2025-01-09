@@ -1,9 +1,9 @@
+from model.object_model.core.endpoint import DatabaseEndPoint
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 
 from dataclasses import dataclass
 
-from model.common import DatabaseEndPoint
 from util.db import create_db_engine
 from util.env import database_endpoint_from_env
 

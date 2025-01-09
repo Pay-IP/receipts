@@ -1,7 +1,6 @@
 from util.web import http_get, url_for_endpoint
-from model.common import Endpoint
+from model.object_model.core.endpoint import Endpoint
 from services.btc_price.rqrsp import GetBtcPriceQuoteResponse
-import requests
 
 class BtcPriceServiceClient:
 

@@ -2,7 +2,7 @@ from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
 
-from model.orm.write_model.merchant_write_model import SKU, Currency
+from model.object_model.write_model.merchant_write_model import SKU, Currency
 
 def seed_merchant_write_model_data(db_engine: Engine):
     seed_currencies = [

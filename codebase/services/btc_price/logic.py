@@ -1,10 +1,10 @@
 from typing import Optional
-from model.common import SUPPORTED_CURRENCIES
+from model.object_model.common import SUPPORTED_CURRENCIES
 from datetime import datetime
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 
-from model.logevent import BtcPriceRequested, BtcPriceQuoted
+from model.object_model.logevent import BtcPriceRequested, BtcPriceQuoted
 from services.btc_price.rqrsp import GetBtcPriceQuoteResponse
 from util.coinbase import CoinBaseClient
 from util.structured_logging import log_event

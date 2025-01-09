@@ -2,7 +2,7 @@ import uuid
 import unittest
 
 from services.create_buy_order.rqrsp import CreateBuyOrderResponse
-from model.common import MAX_BUY_ORDER_SIZE_EXCLUSIVE_ANY_CURRENCY_UNIT, SUPPORTED_CURRENCIES, Currency
+from model.object_model.common import MAX_BUY_ORDER_SIZE_EXCLUSIVE_ANY_CURRENCY_UNIT, SUPPORTED_CURRENCIES, Currency
 from test.utils import put_buy_order, create_buy_order_request, is_200, random_string_not_in
 
 class TestCreateBuyOrderService(unittest.TestCase):

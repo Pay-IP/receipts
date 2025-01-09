@@ -1,15 +1,16 @@
-from model.orm.read_model import BuyOrderReadModel
+from model.object_model.core.queue import Queue
+from model.object_model.core.dto import BuyOrderDTO
+from model.object_model.core.endpoint import QueueEndpoint
+from model.object_model.core.logevent import BuyOrderReadModelSynced, FailedToSyncBuyOrderReadModel
+from model.object_model.read_model.read_model import BuyOrderReadModel
 from sqlalchemy.orm import Session
 from typing import Optional
-from model.common import Queue, QueueEndpoint
 from util.db import get_tested_database_engine
 from util.env import database_endpoint_from_env, queue_endpoint_from_env
 from util.queue import connect_blocking_q_listener
 import traceback
 from util.service.service_config_base import ServiceConfig
 from util.structured_logging import log_event
-from model.logevent import BuyOrderReadModelSynced, FailedToSyncBuyOrderReadModel
-from model.dto import BuyOrderDTO
 
 
 def new_sync_buy_order(read_model_engine):   

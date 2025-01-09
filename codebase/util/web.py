@@ -1,6 +1,6 @@
 import requests
-from util.env import env_int, env_str
-from model.common import DatabaseEndPoint, Endpoint
+from model.object_model.core.endpoint import Endpoint
+from util.env import env_int
 
 def url(protocol:str, host:str, port:str, path:str=None):
     root = f'{protocol}://{host}:{port}'

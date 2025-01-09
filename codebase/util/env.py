@@ -1,5 +1,8 @@
-from model.common import DatabaseEndPoint, Endpoint, QueueEndpoint, Queue, Service
+from asyncio import Queue
 import os
+
+from model.object_model.core.endpoint import DatabaseEndPoint, Endpoint, QueueEndpoint
+from model.object_model.core.service import Service
 
 def env_str(key: str):
     return os.environ[key]
@@ -22,7 +25,7 @@ def prefix_str_from_prefix(prefix) -> str:
     return prefix_str.upper()
 
 
-def database_endpoint_from_env(prefix):
+def database_endpoint_from_env(prefix) -> DatabaseEndPoint:
     prefix_str = prefix_str_from_prefix(prefix)
     return DatabaseEndPoint(
         protocol='http',
@@ -34,7 +37,7 @@ def database_endpoint_from_env(prefix):
         retry_wait_s=env_int(f'{prefix_str}_RETRY_WAIT_S')
     )
 
-def endpoint_from_env(prefix, no_path: bool = True):
+def endpoint_from_env(prefix, no_path: bool = True) -> Endpoint:
 
     prefix_str = prefix_str_from_prefix(prefix)
 
@@ -48,7 +51,7 @@ def endpoint_from_env(prefix, no_path: bool = True):
 def service_endpoint_from_env(service: Service):
     return endpoint_from_env(service.value)
 
-def queue_endpoint_from_env(prefix: str, queue: Queue):
+def queue_endpoint_from_env(prefix: str, queue: Queue) -> QueueEndpoint:
     
     prefix_str = prefix_str_from_prefix(prefix)
     
