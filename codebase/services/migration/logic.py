@@ -56,7 +56,7 @@ def get_read_model_db_engine():
 
 def migrate_and_seed_write_model():
     write_model_engine = get_write_model_db_engine()
-    migrate(write_model_db_endpoint, 'model/relational_model/migrations/write_model')
+    migrate(write_model_db_endpoint, 'model/write_model/migrations')
     
     seed_common_base_schema(write_model_engine)
     seed_merchant_base_schema(write_model_engine)
@@ -64,7 +64,7 @@ def migrate_and_seed_write_model():
 
 def migrate_and_seed_read_model():
     read_model_engine = get_read_model_db_engine()
-    migrate(read_model_db_endpoint, 'model/relational_model/migrations/read_model')
+    migrate(read_model_db_endpoint, 'model/read_model/migrations')
 
 def before_launching_migration_server(service_config: ServiceConfig):
 

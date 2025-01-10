@@ -7,7 +7,7 @@ from model.write_model.objects.merchant_write_model import Invoice, InvoiceLine
 
 
 def applicable_sales_tax_percent(
-    currency: Currency, 
+    currency: Currency, # should be country code
     timestamp: datetime.datetime
 ) -> Decimal:
 
@@ -22,6 +22,10 @@ def applicable_sales_tax_percent(
             return Decimal('20.0')
         case 'ZAR', _:
             return Decimal('15.0')
+        case 'BTC', _:
+            return Decimal('0.0')
+        
+    raise Exception(f'Unsupported currency: {currency.iso3}')
 
 def new_merchant_invoice(
     currency: Currency, 

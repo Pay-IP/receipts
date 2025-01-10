@@ -33,7 +33,7 @@ def seed_merchant_payment_processors(db_engine: Engine):
     payment_processors = [
         PaymentProcessor(
             name = 'Nedbank',
-            vostro_id = str(uuid.uuid4())
+            merchant_reference = str(uuid.uuid4())
         ),
     ]
 

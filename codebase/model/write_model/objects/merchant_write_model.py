@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, DateTime, String, SMALLINT, DECIMAL, Boo
 from sqlalchemy.sql.functions import func
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from model.write_model.objects.write_model_base import WriteModelBase
 
@@ -9,7 +10,7 @@ class MerchantClient(WriteModelBase):
     __tablename__ = 'merchant_client'
 
     id = Column(Integer, primary_key=True)
-    platform_id = Column(UUID(as_uuid=True), nullable=False)
+    platform_reference = Column(UUID(as_uuid=True), nullable=False)
     
 
 class PaymentProcessor(WriteModelBase):
@@ -17,7 +18,7 @@ class PaymentProcessor(WriteModelBase):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(254), unique=True, nullable=False)
-    vostro_id = Column(UUID(as_uuid=True), nullable=False)
+    merchant_reference = Column(UUID(as_uuid=True), nullable=False)
 
 class SKU(WriteModelBase):
     __tablename__ = 'merchant_sku'
@@ -33,7 +34,6 @@ class Invoice(WriteModelBase):
     client = Column('client_id', ForeignKey('merchant_client.id'), nullable=True)
 
     timestamp = Column(DateTime(timezone=True), nullable=False) 
-    
     currency = Column('currency_id', ForeignKey('currency.id'), nullable=False)
     
     sales_tax_percent = Column(DECIMAL(10, 2), nullable=False)
@@ -41,11 +41,18 @@ class Invoice(WriteModelBase):
     sales_tax_amount = Column(Integer())
     total_amount_after_tax = Column(Integer())
 
+    lines = relationship('InvoiceLine', back_populates='invoice', lazy='dynamic')
+    payments = relationship('InvoicePayment', back_populates='invoice', lazy='dynamic')
+    receipts = relationship('InvoiceReceipt', back_populates='invoice', lazy='dynamic')
+
+
 class InvoiceLine(WriteModelBase):
     __tablename__ = 'merchant_invoice_line'
 
     id = Column(Integer, primary_key=True)
-    invoice = Column('invoice_id', ForeignKey('merchant_invoice.id'), nullable=False)
+
+    invoice_id = Column('invoice_id', ForeignKey('merchant_invoice.id'), nullable=False)
+    invoice = relationship("Invoice", back_populates="lines")
 
     sku = Column('sku_id', ForeignKey('merchant_sku.id'), nullable=False)
     sku_count = Column(Integer, nullable=False)
@@ -56,7 +63,9 @@ class InvoicePayment(WriteModelBase):
     __tablename__ = 'merchant_invoice_payment'
 
     id = Column(Integer, primary_key=True)
-    invoice = Column('invoice_id', ForeignKey('merchant_invoice.id'), nullable=False)
+
+    invoice_id = Column('invoice_id', ForeignKey('merchant_invoice.id'), nullable=False)
+    invoice = relationship("Invoice", back_populates="payments")
 
     timestamp = Column(DateTime(timezone=True), nullable=False, server_default=func.now()) 
    
@@ -72,8 +81,10 @@ class InvoiceReceipt(WriteModelBase):
     __tablename__ = 'merchant_invoice_receipt'
 
     id = Column(Integer, primary_key=True)
-    invoice = Column('invoice_id', ForeignKey('merchant_invoice.id'), nullable=False)
     
+    invoice_id = Column('invoice_id', ForeignKey('merchant_invoice.id'), nullable=False)
+    invoice = relationship("Invoice", back_populates="receipts")
+
 
 from psycopg2.extensions import register_adapter, AsIs
 for fk_class in [MerchantClient, PaymentProcessor, SKU, Invoice]:

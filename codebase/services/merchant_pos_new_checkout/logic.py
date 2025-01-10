@@ -1,5 +1,4 @@
 import datetime
-from decimal import Decimal
 from model.orm.query import insert_all, insert_one, select_all
 from model.write_model.objects.common import Currency
 from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, PaymentProcessor
@@ -11,11 +10,6 @@ from services.pmt_proc_new_pmt.client import PaymentProcessorNewPaymentClient
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest, PaymentProcessorNewPaymentResponse
 from util.service.service_config_base import ServiceConfig
 
-
-# merchant seed data required
-# - currency
-# - payment processor
-# - SKUs
 
 def handle_merchant_pos_new_checkout_request(
     config: ServiceConfig, 
@@ -58,7 +52,8 @@ def handle_merchant_pos_new_checkout_request(
     # link and insert invoice lines
 
     for line in lines:
-        line.invoice = invoice_id
+        line.invoice = invoice
+        line.invoice_id = invoice_id
 
     insert_all(lines, db_engine)
     

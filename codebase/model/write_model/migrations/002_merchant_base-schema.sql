@@ -6,7 +6,7 @@ CREATE TABLE merchant_client (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
 
-    platform_id UUID NOT NULL UNIQUE
+    platform_reference UUID NOT NULL UNIQUE
 );
 
 -- Payment Processor
@@ -17,7 +17,7 @@ CREATE TABLE merchant_payment_processor (
         PRIMARY KEY(id),
 
     name VARCHAR(254) NOT NULL UNIQUE,
-    vostro_id UUID NOT NULL UNIQUE
+    merchant_reference UUID NOT NULL UNIQUE
 );
 
 
