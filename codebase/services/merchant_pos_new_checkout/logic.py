@@ -1,8 +1,8 @@
 import datetime
 from decimal import Decimal
-from model.object_model.query.select import insert_all, insert_one, select_all
-from model.object_model.write_model.common import Currency
-from model.object_model.write_model.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, PaymentProcessor
+from model.orm.query import insert_all, insert_one, select_all
+from model.write_model.objects.common import Currency
+from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, PaymentProcessor
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutResponse
 from services.platform_new_receipt.client import PlatformNewReceiptClient
 from services.platform_new_receipt.rqrsp import PlatformNewReceiptRequest

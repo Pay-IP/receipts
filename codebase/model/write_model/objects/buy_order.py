@@ -5,7 +5,7 @@ from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.sql.sqltypes import DECIMAL
 from sqlalchemy.dialects.postgresql import UUID
 
-from model.object_model.core.write_model_base import WriteModelBase
+from model.write_model.objects.write_model_base import WriteModelBase
 
 class BuyOrderRunningTotal(WriteModelBase):
     __tablename__ = 'buy_order_running_total'

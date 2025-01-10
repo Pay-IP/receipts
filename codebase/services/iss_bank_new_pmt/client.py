@@ -1,6 +1,6 @@
 from services.iss_bank_new_pmt.rqrsp import IssuingBankNewPaymentRequest, IssuingBankNewPaymentResponse
-from model.object_model.core.endpoint import Endpoint
-from model.object_model.core.service import Service
+from model.core.objects.endpoint import Endpoint
+from model.core.objects.service import Service
 from util.env import service_endpoint_from_env
 from util.service.service_client_base import ServiceClientBase
 

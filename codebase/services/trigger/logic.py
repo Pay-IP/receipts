@@ -1,13 +1,13 @@
 import random
 
-from model.object_model.write_model.common import Currency
+from model.write_model.objects.common import Currency
+from model.write_model.objects.merchant_write_model import SKU
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 
 from services.merchant_pos_new_checkout.client import MerchantPosNewCheckoutClient
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestItem
 from services.trigger.rqrsp import TriggerRequest
-from model.object_model.write_model.merchant_write_model import SKU
 from util.service.service_config_base import ServiceConfig
 
 def random_merchant_pos_new_checkout_request(

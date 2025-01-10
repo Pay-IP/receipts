@@ -2,8 +2,8 @@
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest, PaymentProcessorNewPaymentResponse
 from util.env import service_endpoint_from_env
 from util.service.service_client_base import ServiceClientBase
-from model.object_model.core.endpoint import Endpoint
-from model.object_model.core.service import Service
+from model.core.objects.endpoint import Endpoint
+from model.core.objects.service import Service
 
 class PaymentProcessorNewPaymentClient(ServiceClientBase):
 

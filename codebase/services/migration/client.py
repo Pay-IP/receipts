@@ -1,5 +1,5 @@
-from model.object_model.core.endpoint import Endpoint
-from model.object_model.core.logevent import WaitedForMigrations, WaitingForMigrations
+from model.core.objects.logevent import WaitedForMigrations, WaitingForMigrations
+from model.core.objects.endpoint import Endpoint
 from util.env import endpoint_from_env
 from util.web import http_get, url_for_endpoint
 import time

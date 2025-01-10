@@ -1,5 +1,5 @@
 import requests
-from model.object_model.core.endpoint import Endpoint
+from model.core.objects.endpoint import Endpoint
 from util.env import env_int
 
 def url(protocol:str, host:str, port:str, path:str=None):

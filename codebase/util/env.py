@@ -1,8 +1,8 @@
 from asyncio import Queue
 import os
 
-from model.object_model.core.endpoint import DatabaseEndPoint, Endpoint, QueueEndpoint
-from model.object_model.core.service import Service
+from model.core.objects.endpoint import DatabaseEndPoint, Endpoint, QueueEndpoint
+from model.core.objects.service import Service
 
 def env_str(key: str):
     return os.environ[key]

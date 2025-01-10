@@ -23,4 +23,4 @@ from sqlalchemy.sql.functions import func
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 
-from model.object_model.core.write_model_base import WriteModelBase
+from model.write_model.objects.write_model_base import WriteModelBase

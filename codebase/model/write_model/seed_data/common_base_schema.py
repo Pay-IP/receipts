@@ -1,4 +1,4 @@
-from model.object_model.write_model.common import Currency
+from model.write_model.objects.common import Currency
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select

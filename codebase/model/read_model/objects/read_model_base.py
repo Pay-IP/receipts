@@ -1,8 +1,11 @@
-from sqlalchemy import Column, Integer, DateTime
-from sqlalchemy.sql.sqltypes import DECIMAL, String
+from sqlalchemy import Column, Integer, DateTime, String
+from sqlalchemy.sql.sqltypes import DECIMAL
 from sqlalchemy.dialects.postgresql import UUID
 
-from model.object_model.core.read_model_base import ReadModelBase
+from sqlalchemy.orm import declarative_base
+
+ReadModelBase = declarative_base()
+
 
 class BuyOrderReadModel(ReadModelBase):
     __tablename__ = 'buy_order_read_model'

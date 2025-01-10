@@ -2,12 +2,12 @@ from dataclasses import dataclass
 import datetime
 import traceback
 from typing import Callable
-from model.object_model.core.logevent import HealthChecked, RequestFailed, RequestReceivedLogEvent, ResponseReturnedLogEvent, ServiceStartupLogicExceptionOccurred, ServiceWebServeExceptionOccurred
+from model.core.objects.logevent import HealthChecked, RequestFailed, RequestReceivedLogEvent, ResponseReturnedLogEvent, ServiceStartupLogicExceptionOccurred, ServiceWebServeExceptionOccurred
 from services.migration.client import MigrationServiceClient
 from util.service.service_config_base import ServiceConfig
 import uvicorn
 from util.structured_logging import configure_structured_logging, configure_structured_logging
-from model.object_model.core.service import Service
+from model.core.objects.service import Service
 from util.structured_logging import log_event
 from util.env import env_int, env_str
 from fastapi.exceptions import HTTPException

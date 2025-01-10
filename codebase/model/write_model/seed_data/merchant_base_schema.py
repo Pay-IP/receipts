@@ -1,9 +1,10 @@
 import uuid
+from model.write_model.objects.merchant_write_model import SKU, PaymentProcessor
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
 
-from model.object_model.write_model.merchant_write_model import SKU, PaymentProcessor
+#from model.object_model.write_model.merchant_write_model import SKU, PaymentProcessor
 
 def seed_merchant_skus(db_engine: Engine):
 

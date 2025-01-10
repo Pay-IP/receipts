@@ -2,8 +2,8 @@ import traceback
 from typing import Optional
 import time
 
-from model.object_model.core.endpoint import DatabaseEndPoint
-from model.object_model.core.logevent import ConnectedToDatabase, FailedToConnectToDatabase
+from model.core.objects.endpoint import DatabaseEndPoint
+from model.core.objects.logevent import ConnectedToDatabase, FailedToConnectToDatabase
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 

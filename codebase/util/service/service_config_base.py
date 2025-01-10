@@ -1,4 +1,4 @@
-from model.object_model.core.endpoint import DatabaseEndPoint
+from model.core.objects.endpoint import DatabaseEndPoint
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 
