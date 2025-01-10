@@ -41,9 +41,9 @@ def handle_merchant_pos_new_checkout_request(
             currency_amount = sku.price * item.sku_count
         ))
 
-    timestamp = datetime.datetime.now()
+    invoice_timestamp = datetime.datetime.now()
 
-    invoice = new_merchant_invoice(currency, timestamp, lines)
+    invoice = new_merchant_invoice(currency, invoice_timestamp, lines)
 
     # insert invoice
 

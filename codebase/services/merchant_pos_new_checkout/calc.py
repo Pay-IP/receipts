@@ -31,7 +31,7 @@ def new_merchant_invoice(
     currency: Currency, 
     timestamp: datetime.datetime,
     invoice_lines: list[InvoiceLine],
-) -> None:
+) -> Invoice:
 
     sales_tax_percent = applicable_sales_tax_percent(currency, timestamp)
 
