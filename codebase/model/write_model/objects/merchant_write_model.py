@@ -35,8 +35,8 @@ class Invoice(WriteModelBase):
     timestamp = Column(DateTime(timezone=True), nullable=False) 
     
     currency = Column('currency_id', ForeignKey('currency.id'), nullable=False)
-    sales_tax_percent = Column(DECIMAL(10, 2), nullable=False)
     
+    sales_tax_percent = Column(DECIMAL(10, 2), nullable=False)
     total_amount_before_tax = Column(Integer())
     sales_tax_amount = Column(Integer())
     total_amount_after_tax = Column(Integer())

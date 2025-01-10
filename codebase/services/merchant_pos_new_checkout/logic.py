@@ -3,6 +3,7 @@ from decimal import Decimal
 from model.orm.query import insert_all, insert_one, select_all
 from model.write_model.objects.common import Currency
 from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, PaymentProcessor
+from services.merchant_pos_new_checkout.calc import new_merchant_invoice
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutResponse
 from services.platform_new_receipt.client import PlatformNewReceiptClient
 from services.platform_new_receipt.rqrsp import PlatformNewReceiptRequest
@@ -46,52 +47,36 @@ def handle_merchant_pos_new_checkout_request(
             currency_amount = sku.price * item.sku_count
         ))
 
-    sales_tax_percent = Decimal('14.0') # TODO source from DB
-    total_amount_before_tax = sum([line.currency_amount for line in lines])
-    sales_tax_amount = total_amount_before_tax * sales_tax_percent / Decimal('100.0')
+    timestamp = datetime.datetime.now()
 
-    invoice = Invoice(
+    invoice = new_merchant_invoice(currency, timestamp, lines)
 
-        timestamp = datetime.datetime.now(),
+    # insert invoice
 
-        currency = currency,
-        sales_tax_percent = sales_tax_percent, 
+    invoice_id = insert_one(invoice, db_engine)
 
-        total_amount_before_tax = total_amount_before_tax,
-        sales_tax_amount = sales_tax_amount,
-        total_amount_after_tax = total_amount_before_tax - sales_tax_amount
-    )
-
-    invoice_id = insert_one(invoice, db_engine=db_engine)
+    # link and insert invoice lines
 
     for line in lines:
         line.invoice = invoice_id
 
     insert_all(lines, db_engine)
-        
-    # with Session(db_engine) as db_session:
-    #     with db_session.begin():            
-            
-    #         for item in items:            
-    #             db_session.add(item)
-            
-    #         db_session.flush()
-
-
+    
     # trigger customer payment via payment processor
 
     payment_processor: PaymentProcessor = select_all(PaymentProcessor, db_engine)[0]
 
-    # TODO client for payment processor
+    # TODO client for specific payment processor
     pmt_proc_rsp: PaymentProcessorNewPaymentResponse = PaymentProcessorNewPaymentClient().post(
         PaymentProcessorNewPaymentRequest(
             currency=currency.iso3,
             currency_amt=invoice.total_amount_after_tax
     ))
 
-    # create an invoice payment
+    # create payment and link to invoice
 
     payment = InvoicePayment(
+
         invoice = invoice,
 
         currency = currency,
