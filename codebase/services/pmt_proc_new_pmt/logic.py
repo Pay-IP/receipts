@@ -5,7 +5,7 @@ from services.iss_bank_new_pmt.client import IssuingBankNewCustomerPaymentClient
 from services.iss_bank_new_pmt.rqrsp import IssuingBankNewPaymentRequest, IssuingBankNewPaymentResponse
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest, PaymentProcessorNewPaymentResponse
 from util.service.service_config_base import ServiceConfig
-from util.web import serialize_datetime
+from util.web import serialize_datetime, serialize_uuid
 
 import base64
 
@@ -14,7 +14,7 @@ def handle_payment_processor_new_customer_payment_request(
     rq: PaymentProcessorNewPaymentRequest
 ):
     
-    pmt_proc_unique_payment_reference = str(uuid.uuid4())
+    pmt_proc_unique_payment_reference = serialize_uuid(uuid.uuid4())
     pmt_proc_pmt_timestamp = datetime.datetime.now()
 
     iss_bank_new_pmt_rsp: IssuingBankNewPaymentResponse = IssuingBankNewCustomerPaymentClient().post(

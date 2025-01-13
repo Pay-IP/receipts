@@ -35,8 +35,8 @@ def new_merchant_invoice(
 
     sales_tax_percent = applicable_sales_tax_percent(currency, timestamp)
 
-    total_amount_before_tax = sum([line.currency_amount for line in invoice_lines])
-    sales_tax_amount = total_amount_before_tax * sales_tax_percent / Decimal('100.0')
+    total_amount_before_tax: int = sum([line.currency_amount for line in invoice_lines])
+    sales_tax_amount: int = round(total_amount_before_tax * sales_tax_percent / 100)
     total_amount_after_tax = total_amount_before_tax + sales_tax_amount 
 
     return Invoice(

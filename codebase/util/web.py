@@ -1,4 +1,5 @@
 import datetime
+from uuid import UUID
 import requests
 from model.core.objects.endpoint import Endpoint
 from util.env import env_int
@@ -27,3 +28,6 @@ def http_post(
 
 def serialize_datetime(date: datetime.datetime) -> str:
     return date.isoformat()
+
+def serialize_uuid(uuid: UUID) -> str:
+    return uuid.hex

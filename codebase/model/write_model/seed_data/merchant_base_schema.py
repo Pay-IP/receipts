@@ -3,6 +3,7 @@ from model.write_model.objects.merchant_write_model import SKU, PaymentProcessor
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
+from util.web import serialize_uuid
 
 #from model.object_model.write_model.merchant_write_model import SKU, PaymentProcessor
 
@@ -33,7 +34,7 @@ def seed_merchant_payment_processors(db_engine: Engine):
     payment_processors = [
         PaymentProcessor(
             name = 'Nedbank',
-            merchant_reference = str(uuid.uuid4())
+            merchant_reference = serialize_uuid(uuid.uuid4())
         ),
     ]
 

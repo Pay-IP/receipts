@@ -1,6 +1,6 @@
 from services.platform_new_pmt.rqrsp import PlatformNewPaymentRequest
 from util.service.service_base import ServiceDefinition, api_for_service_definition, request_handler
-from services.platform_new_pmt.logic import handle_platform_new_payment_request
+from services.platform_new_pmt.logic import handle_platform_new_payment_request_from_customer_bank
 from services.platform_new_pmt.definition import platform_new_payment_service_definition
 
 def api():
@@ -13,7 +13,7 @@ def api():
         return request_handler(
             definition,
             PlatformNewPaymentRequest, 
-            handle_platform_new_payment_request
+            handle_platform_new_payment_request_from_customer_bank
         )(rq)
 
     return api

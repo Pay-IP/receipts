@@ -10,7 +10,7 @@ from services.platform_new_receipt.rqrsp import PlatformNewReceiptRequest
 from services.pmt_proc_new_pmt.client import PaymentProcessorNewPaymentClient
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest, PaymentProcessorNewPaymentResponse
 from util.service.service_config_base import ServiceConfig
-from util.web import serialize_datetime
+from util.web import serialize_datetime, serialize_uuid
 
 
 def handle_merchant_pos_new_checkout_request(
@@ -44,7 +44,7 @@ def handle_merchant_pos_new_checkout_request(
 
     invoice_timestamp = datetime.datetime.now()
 
-    invoice = new_merchant_invoice(currency, invoice_timestamp, lines)
+    invoice: Invoice = new_merchant_invoice(currency, invoice_timestamp, lines)
 
     # insert invoice
 
@@ -60,7 +60,7 @@ def handle_merchant_pos_new_checkout_request(
     
     # trigger customer payment via payment processor
 
-    unique_payment_reference = str(uuid.uuid4())
+    unique_payment_reference = uuid.uuid4()
 
     payment_processor: PaymentProcessor = select_all(PaymentProcessor, db_engine)[0]
 
@@ -71,7 +71,7 @@ def handle_merchant_pos_new_checkout_request(
             currency_amt=invoice.total_amount_after_tax,
 
             invoice_timestamp=serialize_datetime(invoice_timestamp),
-            reference=unique_payment_reference
+            reference=serialize_uuid(unique_payment_reference)
     ))
 
     # failure case
@@ -83,7 +83,7 @@ def handle_merchant_pos_new_checkout_request(
     
     # bad match case
 
-    if pmt_proc_rsp.original_merchant_reference != unique_payment_reference:
+    if pmt_proc_rsp.original_merchant_reference != serialize_uuid(unique_payment_reference):
         return MerchantPosNewCheckoutResponse(
             successful=False
         )
