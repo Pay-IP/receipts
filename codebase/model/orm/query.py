@@ -11,7 +11,7 @@ def insert_one(item, db_engine: Engine):
         with db_session.begin():            
             db_session.add(item)
             db_session.flush()
-            return item.id
+            return item
         
 
 def insert_all(items, db_engine: Engine):

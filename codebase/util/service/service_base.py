@@ -5,6 +5,7 @@ from typing import Callable
 from model.core.objects.logevent import HealthChecked, RequestFailed, RequestReceivedLogEvent, ResponseReturnedLogEvent, ServiceStartupLogicExceptionOccurred, ServiceWebServeExceptionOccurred
 from services.migration.client import MigrationServiceClient
 from util.service.service_config_base import ServiceConfig
+from util.web import serialize_datetime
 import uvicorn
 from util.structured_logging import configure_structured_logging, configure_structured_logging
 from model.core.objects.service import Service
@@ -30,7 +31,7 @@ def register_healthcheck_endpoint(api):
 
     @api.get("/healthcheck")
     def get_root():
-        log_event(HealthChecked(timestamp=datetime.datetime.now().isoformat()))
+        log_event(HealthChecked(timestamp=serialize_datetime(datetime.datetime.now())))
 
 def start_service(
     definition: ServiceDefinition,

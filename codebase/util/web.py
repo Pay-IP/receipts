@@ -1,3 +1,4 @@
+import datetime
 import requests
 from model.core.objects.endpoint import Endpoint
 from util.env import env_int
@@ -24,3 +25,5 @@ def http_post(
     return requests.post(url, timeout=timeout_s, json=json)
 
 
+def serialize_datetime(date: datetime.datetime) -> str:
+    return date.isoformat()
