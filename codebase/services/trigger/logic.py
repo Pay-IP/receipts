@@ -43,10 +43,6 @@ def random_merchant_pos_new_checkout_request(
 
     currency = random.sample(currencies, 1)[0] 
 
-    # total_amount_before_tax = sum([x.currency_amount for x in lines])
-    # sales_tax_amount = round(total_amount_before_tax * sales_tax_percent / 100.0)
-    # total_amount_after_tax = total_amount_before_tax + sales_tax_amount 
-
     return MerchantPosNewCheckoutRequest(
         client_id = None,    
         items = lines,

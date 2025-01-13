@@ -1,4 +1,4 @@
-from services.platform_new_receipt.rqrsp import PlatformNewReceiptRequest
+from services.platform_new_receipt.rqrsp import PlatformReceiptRequest
 from util.service.service_base import ServiceDefinition, api_for_service_definition, request_handler
 from services.platform_new_receipt.logic import handle_platform_new_receipt_request
 from services.platform_new_receipt.definition import platform_new_receipt_service_definition
@@ -9,10 +9,10 @@ def api():
     api = api_for_service_definition(definition)
 
     @api.post("/")
-    def new_platform_receipt(rq: PlatformNewReceiptRequest):
+    def new_platform_receipt(rq: PlatformReceiptRequest):
         return request_handler(
             definition,
-            PlatformNewReceiptRequest, 
+            PlatformReceiptRequest, 
             handle_platform_new_receipt_request
         )(rq)
     

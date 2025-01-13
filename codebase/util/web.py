@@ -29,5 +29,8 @@ def http_post(
 def serialize_datetime(date: datetime.datetime) -> str:
     return date.isoformat()
 
+def deserialize_datetime(date: str) -> datetime.datetime:
+    return datetime.datetime.fromisoformat(date)
+
 def serialize_uuid(uuid: UUID) -> str:
     return uuid.hex
