@@ -63,9 +63,10 @@ def construct_and_persist_core_invoice(
 
 def execute_customer_payment_via_payment_processor(
     db_engine, 
-    invoice: Invoice, 
-    payment_processor: PaymentProcessor
+    invoice: Invoice
 ):
+    
+    payment_processor: PaymentProcessor = select_all(PaymentProcessor, db_engine)[0]
 
     merchant_unique_payment_reference = uuid.uuid4()
 
@@ -160,9 +161,7 @@ def handle_merchant_pos_new_checkout_request(
     
     db_engine = config.write_model_db_engine()
     invoice = construct_and_persist_core_invoice(db_engine, rq.currency, rq.items)
-
-    payment_processor: PaymentProcessor = select_all(PaymentProcessor, db_engine)[0]
-    customer_payment = execute_customer_payment_via_payment_processor(db_engine, invoice, payment_processor)
+    customer_payment = execute_customer_payment_via_payment_processor(db_engine, invoice)
     customer_payment_was_successful = customer_payment.successful
     create_receipt_for_invoice_and_submit_to_platform(db_engine, invoice.id)
 
