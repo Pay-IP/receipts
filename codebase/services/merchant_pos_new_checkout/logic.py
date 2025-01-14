@@ -113,7 +113,7 @@ def create_receipt_for_invoice_and_submit_to_platform(
 
     receipt: InvoiceReceipt = insert_one(
         InvoiceReceipt(
-            invoice = invoice,
+            # invoice = invoice,
             invoice_id = invoice.id
         ), 
         db_engine=db_engine
@@ -143,8 +143,8 @@ def create_receipt_for_invoice_and_submit_to_platform(
             total_amount_after_tax = invoice.total_amount_after_tax
         ),
         payment_channel_payment_data = PlatformPaymentChannelPaymentData(
-            payment_channel=payment.payment_processor.name,
-            payment_channel_payment_reference=payment.reference
+            payment_channel=PlatformPaymentChannelEnum.CARD.value,
+            payment_channel_payment_reference=payment.payment_processor_reference
         )
     )
 
@@ -162,7 +162,8 @@ def handle_merchant_pos_new_checkout_request(
     invoice = construct_and_persist_core_invoice(db_engine, rq.currency, rq.items)
 
     payment_processor: PaymentProcessor = select_all(PaymentProcessor, db_engine)[0]
-    customer_payment_was_successful = execute_customer_payment_via_payment_processor(db_engine, invoice, payment_processor)
+    customer_payment = execute_customer_payment_via_payment_processor(db_engine, invoice, payment_processor)
+    customer_payment_was_successful = customer_payment.successful
     create_receipt_for_invoice_and_submit_to_platform(db_engine, invoice.id)
 
     return MerchantPosNewCheckoutResponse(
