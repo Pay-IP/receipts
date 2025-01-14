@@ -1,13 +1,13 @@
 from uuid import UUID, uuid4
 
-from services.iss_bank_new_pmt.rqrsp import IssuingBankNewPaymentRequest, IssuingBankNewPaymentResponse
+from services.iss_bank_new_pmt.rqrsp import IssuingBankNewCardPaymentRequest, IssuingBankNewCardPaymentResponse
 from services.platform_new_pmt.client import PlatformNewPaymentClient
 from services.platform_new_pmt.rqrsp import PlatformNewPaymentRequest
 from util.service.service_config_base import ServiceConfig
 from util.web import serialize_uuid
 
 
-def customer_id_from_rq(rq: IssuingBankNewPaymentRequest) -> UUID:
+def customer_id_from_rq(rq: IssuingBankNewCardPaymentRequest) -> UUID:
     return uuid4()
 
 def anonymous_external_facing_customer_id_for_internal_customer_id(internal_customer_id: UUID) -> UUID:
@@ -15,7 +15,7 @@ def anonymous_external_facing_customer_id_for_internal_customer_id(internal_cust
 
 def handle_issuing_bank_new_payment_request_from_payment_processor(
     config: ServiceConfig,
-    rq: IssuingBankNewPaymentRequest
+    rq: IssuingBankNewCardPaymentRequest
 ):
     
     internal_customer_id = customer_id_from_rq(rq)
@@ -31,7 +31,11 @@ def handle_issuing_bank_new_payment_request_from_payment_processor(
         )
     )
 
-    return IssuingBankNewPaymentResponse(
+    issuer_emv_data = EmvIssuerData(
+        
+    )
+
+    return IssuingBankNewCardPaymentResponse(
         
         successful = True,
         

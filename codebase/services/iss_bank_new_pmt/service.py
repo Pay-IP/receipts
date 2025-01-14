@@ -1,4 +1,4 @@
-from services.iss_bank_new_pmt.rqrsp import IssuingBankNewPaymentRequest
+from services.iss_bank_new_pmt.rqrsp import IssuingBankNewCardPaymentRequest
 from util.service.service_base import ServiceDefinition, api_for_service_definition
 from util.service.service_base import request_handler
 from services.iss_bank_new_pmt.logic import handle_issuing_bank_new_payment_request_from_payment_processor
@@ -11,10 +11,10 @@ def api():
     api = api_for_service_definition(definition)
 
     @api.post("/")
-    def new_payment(rq: IssuingBankNewPaymentRequest):
+    def new_payment(rq: IssuingBankNewCardPaymentRequest):
         return request_handler(
             definition,
-            IssuingBankNewPaymentRequest,
+            IssuingBankNewCardPaymentRequest,
             handle_issuing_bank_new_payment_request_from_payment_processor
         )(rq)
 

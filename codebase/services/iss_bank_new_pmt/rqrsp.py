@@ -1,11 +1,9 @@
 from pydantic import BaseModel
 
-class IssuingBankNewPaymentRequest(BaseModel):
-    currency: str
-    currency_amount: int
-    payment_processor_payment_reference: str
+from model.write_model.objects.emv import AcquirerEmvTransactionData, IssuerEmvTransactionData
 
-class IssuingBankNewPaymentResponse(BaseModel):
-    successful: bool
-    currency: str
-    currency_amount_paid: int
+class IssuingBankNewCardPaymentRequest(BaseModel):
+    acquirer_emv_data: AcquirerEmvTransactionData
+
+class IssuingBankNewCardPaymentResponse(BaseModel):
+    issuer_emv_data: IssuerEmvTransactionData

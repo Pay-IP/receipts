@@ -1,22 +1,23 @@
 from pydantic import BaseModel
 
-class PaymentProcessorNewPaymentRequest(BaseModel):
+from model.write_model.objects.emv import AcquirerEmvTransactionData, IssuerEmvTransactionData
+
+class PaymentProcessorNewCardPaymentRequest(BaseModel):
 
     currency: str
     currency_amt: int
+    merchant_reference: str
 
-    reference: str
-    invoice_timestamp: str
 
-class PaymentProcessorNewPaymentResponse(BaseModel):
+class PaymentProcessorEmvData(BaseModel):
 
-    currency: str
-    currency_amt_paid: int
-    original_merchant_reference: str
+    acquirer_emv_data: AcquirerEmvTransactionData 
+    issuer_emv_data: IssuerEmvTransactionData
+
+
+class PaymentProcessorNewCardPaymentResponse(BaseModel):
 
     successful: bool
-    meta_data_b64: str # EMV data
-
-    reference: str
-    timestamp: str
+    original_merchant_reference: str
+    emv_data: PaymentProcessorEmvData 
     

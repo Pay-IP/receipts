@@ -1,6 +1,6 @@
 import random
 
-from model.write_model.objects.common import Currency
+from model.write_model.objects.currency import Currency
 from model.write_model.objects.merchant_write_model import SKU
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session

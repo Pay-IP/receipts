@@ -2,7 +2,7 @@
 
 import datetime
 from decimal import Decimal
-from model.write_model.objects.common import Currency
+from model.write_model.objects.currency import Currency
 from model.write_model.objects.merchant_write_model import Invoice, InvoiceLine
 
 

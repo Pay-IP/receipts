@@ -1,14 +1,14 @@
 import datetime
 import uuid
 from model.orm.query import insert_all, insert_one, select_all, select_on_filters, select_on_id
-from model.write_model.objects.common import Currency
+from model.write_model.objects.currency import Currency
 from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, InvoiceReceipt, PaymentProcessor
 from services.merchant_pos_new_checkout.calc import new_merchant_invoice
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestItem, MerchantPosNewCheckoutResponse
 from services.platform_new_receipt.client import PlatformNewReceiptClient
 from services.platform_new_receipt.rqrsp import PlatformPaymentChannelEnum, PlatformPaymentChannelPaymentData, PlatformReceiptLine, PlatformReceiptRequest, PlatformReceiptTotals
 from services.pmt_proc_new_pmt.client import PaymentProcessorNewPaymentClient
-from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewPaymentRequest, PaymentProcessorNewPaymentResponse
+from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewCardPaymentResponse
 from util.service.service_config_base import ServiceConfig
 from util.web import deserialize_datetime, serialize_datetime, serialize_uuid
 
@@ -61,30 +61,29 @@ def construct_and_persist_core_invoice(
 
     return invoice
 
-def execute_customer_payment_via_payment_processor(
+def execute_customer_invoice_payment_via_payment_processor(
     db_engine, 
     invoice: Invoice
-):
+) -> InvoicePayment:
     
     payment_processor: PaymentProcessor = select_all(PaymentProcessor, db_engine)[0]
 
     merchant_unique_payment_reference = uuid.uuid4()
 
-    pmt_proc_rsp: PaymentProcessorNewPaymentResponse = PaymentProcessorNewPaymentClient().post(
-        PaymentProcessorNewPaymentRequest(
-            currency=invoice.currency.iso3,
-            currency_amt=invoice.total_amount_after_tax,
-            invoice_timestamp=serialize_datetime(invoice.timestamp),
-            reference=serialize_uuid(merchant_unique_payment_reference)
-    ))
+    pmt_proc_rsp: PaymentProcessorNewCardPaymentResponse = PaymentProcessorNewPaymentClient().new_card_payment(
+        currency=invoice.currency.iso3,
+        currency_amt=invoice.total_amount_after_tax,
+        invoice_timestamp=invoice.timestamp,
+        reference=serialize_uuid(merchant_unique_payment_reference)
+    )
 
     # failure cases
 
     if pmt_proc_rsp.original_merchant_reference != serialize_uuid(merchant_unique_payment_reference):
-        return False
+        return None
 
     if not pmt_proc_rsp.successful:
-        return False
+        return None
 
     # create payment and link to invoice
 
@@ -153,6 +152,8 @@ def create_receipt_for_invoice_and_submit_to_platform(
         platform_receipt_rq
     )
 
+    return True
+
 
 def handle_merchant_pos_new_checkout_request(
     config: ServiceConfig, 
@@ -161,10 +162,9 @@ def handle_merchant_pos_new_checkout_request(
     
     db_engine = config.write_model_db_engine()
     invoice = construct_and_persist_core_invoice(db_engine, rq.currency, rq.items)
-    customer_payment = execute_customer_payment_via_payment_processor(db_engine, invoice)
-    customer_payment_was_successful = customer_payment.successful
+    customer_payment = execute_customer_invoice_payment_via_payment_processor(db_engine, invoice)
     create_receipt_for_invoice_and_submit_to_platform(db_engine, invoice.id)
 
     return MerchantPosNewCheckoutResponse(
-        successful=customer_payment_was_successful
+        successful=customer_payment.successful
     )
