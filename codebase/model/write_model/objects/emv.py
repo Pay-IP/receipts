@@ -1,9 +1,9 @@
 from pydantic import BaseModel
 
-class ISO8583_0200_FinReq(BaseModel):
+class ISO8583_0200_FinReqMsg(BaseModel):
 
-    date: str
-    time: str    
+    transaction_date: str
+    transaction_time: str    
     currency_code: str
     currency_amount: int
     
@@ -23,14 +23,14 @@ class ISO8583_0200_FinReq(BaseModel):
     merchant_address: str
 
 
-class ISO8583_0210_FinRsp(BaseModel):
+class ISO8583_0210_FinRspMsg(BaseModel):
     approved: bool  
     authorization_response_identifier: str
 
 class ISO8583_02_Messages(BaseModel):
-    iso_0200_fin_req: ISO8583_0200_FinReq
-    iso_0210_fin_rsp: ISO8583_0210_FinRsp
+    iso_0200_fin_req: ISO8583_0200_FinReqMsg
+    iso_0210_fin_rsp: ISO8583_0210_FinRspMsg
 
 class TerminalEmvReceipt(BaseModel):
-    iso_0200_fin_req: ISO8583_0200_FinReq
-    iso_0210_fin_rsp: ISO8583_0210_FinRsp
+    iso_0200_fin_req: ISO8583_0200_FinReqMsg
+    iso_0210_fin_rsp: ISO8583_0210_FinRspMsg

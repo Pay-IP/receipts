@@ -4,6 +4,7 @@ from model.core.objects.logevent import DatabaseAlreadyMigrated, DatabaseMigrate
 from model.write_model.seed_data.common_base_schema_seed_data import seed_common_base_schema
 from model.write_model.seed_data.issuing_bank_base_schema_seed_data import seed_issuing_bank_base_schema
 from model.write_model.seed_data.merchant_base_schema_seed_data import seed_merchant_base_schema
+from model.write_model.seed_data.payment_proc_base_schema_seed_data import seed_payment_processor_base_schema
 from util.db import get_tested_database_engine
 from util.env import database_endpoint_from_env
 from util.service.service_config_base import ServiceConfig
@@ -61,6 +62,7 @@ def migrate_and_seed_write_model():
     
     seed_common_base_schema(write_model_engine)
     seed_issuing_bank_base_schema(write_model_engine)
+    seed_payment_processor_base_schema(write_model_engine)
     seed_merchant_base_schema(write_model_engine)
 
 

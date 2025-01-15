@@ -106,7 +106,7 @@ def create_receipt_for_invoice_and_submit_to_platform(
     invoice_id: int
 ):
     
-    invoice: Invoice = select_on_id(db_engine, Invoice, invoice_id)
+    invoice: Invoice = select_on_id(Invoice, invoice_id, db_engine)
 
     receipt: InvoiceReceipt = insert_one(
         InvoiceReceipt(
@@ -115,8 +115,11 @@ def create_receipt_for_invoice_and_submit_to_platform(
         db_engine=db_engine
     )
 
-    payment_matching_criteria = { 'invoice_id': invoice.id, 'successful': True }
-    successful_payments: list[InvoicePayment] = select_on_filters(db_engine, InvoicePayment, payment_matching_criteria)
+    successful_payments: list[InvoicePayment] = select_on_filters(
+        InvoicePayment, 
+        { 'invoice_id': invoice.id, 'successful': True }, 
+        db_engine
+    )
     successful_payment_count = len(successful_payments)
     if successful_payment_count != 1:
         raise Exception(f'in order to generate a receipt, invoice {invoice_id} must have exactly one successful payment, not {successful_payment_count}')

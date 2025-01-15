@@ -10,7 +10,7 @@ CREATE TABLE issuing_bank_client_account (
     age INTEGER NOT NULL,
 
     currency_id INTEGER NOT NULL,
-    CONSTRAINT fk_issuing_bank_client_account_currency
+    CONSTRAINT fk_issuing_bank_client_account_currency_id
         FOREIGN KEY(currency_id) 
 	    REFERENCES currency(id),
 
