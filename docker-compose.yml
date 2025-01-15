@@ -30,8 +30,8 @@ services:
       - "${WRITE_MODEL_DB_PORT}"
     ports:
       - "${WRITE_MODEL_DB_EXT_PORT}:${WRITE_MODEL_DB_PORT}"
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
     volumes:
       - ./mapped_volumes/write_model/var_lib_postgresql_data:/var/lib/postgresql/data
 

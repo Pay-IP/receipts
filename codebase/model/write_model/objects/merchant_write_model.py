@@ -12,7 +12,6 @@ class MerchantClient(WriteModelBase):
     id = Column(Integer, primary_key=True)
     platform_reference = Column(UUID(as_uuid=True), nullable=False)
     
-
 class PaymentProcessor(WriteModelBase):
     __tablename__ = 'merchant_payment_processor'
 

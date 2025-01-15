@@ -1,8 +1,9 @@
 import traceback
 from model.core.objects.endpoint import DatabaseEndPoint
 from model.core.objects.logevent import DatabaseAlreadyMigrated, DatabaseMigrated, DatabaseMigrationExceptionOccurred, PendingDatabaseMigrationsDetected
-from model.write_model.seed_data.common_base_schema import seed_common_base_schema
-from model.write_model.seed_data.merchant_base_schema import seed_merchant_base_schema
+from model.write_model.seed_data.common_base_schema_seed_data import seed_common_base_schema
+from model.write_model.seed_data.issuing_bank_base_schema_seed_data import seed_issuing_bank_base_schema
+from model.write_model.seed_data.merchant_base_schema_seed_data import seed_merchant_base_schema
 from util.db import get_tested_database_engine
 from util.env import database_endpoint_from_env
 from util.service.service_config_base import ServiceConfig
@@ -59,6 +60,7 @@ def migrate_and_seed_write_model():
     migrate(write_model_db_endpoint, 'model/write_model/migrations')
     
     seed_common_base_schema(write_model_engine)
+    seed_issuing_bank_base_schema(write_model_engine)
     seed_merchant_base_schema(write_model_engine)
 
 

@@ -1,3 +1,4 @@
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 -- currency
 
 CREATE TABLE currency (
@@ -8,5 +9,7 @@ CREATE TABLE currency (
     iso3 NCHAR(3) NOT NULL UNIQUE,
 
     decimal_places SMALLINT NOT NULL
-        CHECK ((decimal_places > 0) AND (decimal_places <= 8))
+        CHECK ((decimal_places > 0) AND (decimal_places <= 8)),
+
+    symbol VARCHAR NOT NULL UNIQUE
 );

@@ -8,6 +8,7 @@ class Currency(WriteModelBase):
     id = Column(Integer, primary_key=True)
     iso3 = Column(String(3), nullable=False)
     decimal_places = Column(SMALLINT, nullable=False)
+    symbol = Column(String, nullable=False)
 
     # def __repr__(self):
     #    return f'id {self.id}: {self.iso3} ({self.decimal_places} DP)'

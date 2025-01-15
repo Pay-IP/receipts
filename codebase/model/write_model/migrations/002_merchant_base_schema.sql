@@ -1,5 +1,5 @@
-
--- Client
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- merchant_client
 
 CREATE TABLE merchant_client (
 
@@ -9,7 +9,8 @@ CREATE TABLE merchant_client (
     platform_reference UUID NOT NULL UNIQUE
 );
 
--- Payment Processor
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- merchant_payment_processor
 
 CREATE TABLE merchant_payment_processor (
 
@@ -20,8 +21,8 @@ CREATE TABLE merchant_payment_processor (
     merchant_reference UUID NOT NULL UNIQUE
 );
 
-
--- SKU
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- merchant_sku
 
 CREATE TABLE merchant_sku (
 
@@ -32,7 +33,8 @@ CREATE TABLE merchant_sku (
     price INTEGER NOT NULL
 );
 
--- Invoice
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- merchant_invoice
 
 CREATE TABLE merchant_invoice (
 
@@ -58,7 +60,8 @@ CREATE TABLE merchant_invoice (
     total_amount_after_tax INTEGER NOT NULL
 );
 
--- InvoiceLine
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- merchant_invoice_line
 
 CREATE TABLE merchant_invoice_line (
 
@@ -79,7 +82,8 @@ CREATE TABLE merchant_invoice_line (
     currency_amount INTEGER NOT NULL
 );
 
--- InvoicePayment
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- merchant_invoice_payment
 
 CREATE TABLE merchant_invoice_payment (
 
@@ -111,8 +115,8 @@ CREATE TABLE merchant_invoice_payment (
     successful BOOLEAN NOT NULL
 );
 
-
--- Invoice Receipt
+-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+-- merchant_invoice_receipt
 
 CREATE TABLE merchant_invoice_receipt (
 

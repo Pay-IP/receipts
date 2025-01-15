@@ -7,11 +7,11 @@ from sqlalchemy.sql.expression import select
 def seed_common_base_schema(db_engine: Engine):
    
     seed_currencies = [
-        Currency(iso3='BTC', decimal_places=8),
-        Currency(iso3='EUR', decimal_places=2),
-        Currency(iso3='GBP', decimal_places=2),
-        Currency(iso3='USD', decimal_places=2),
-        Currency(iso3='ZAR', decimal_places=2),
+        # Currency(iso3='BTC', decimal_places=8),
+        # Currency(iso3='EUR', decimal_places=2),
+        # Currency(iso3='GBP', decimal_places=2),
+        # Currency(iso3='USD', decimal_places=2),
+        Currency(iso3='ZAR', decimal_places=2, symbol='R'),
     ]
 
     with Session(db_engine) as db_session:

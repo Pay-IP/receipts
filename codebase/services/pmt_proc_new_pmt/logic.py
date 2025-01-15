@@ -10,6 +10,15 @@ def handle_new_card_payment_request_from_merchant_pos(
     config: ServiceConfig, 
     rq: PaymentProcessorNewCardPaymentRequest
 ):
+    # validate merchant
+    # determine merchant terminal id
+    # get merchant-specific info
+    # - address
+
+    # get PAN for a valid customer - directly from from issuing bank db sub-model
+    # this would normally happen out-of-band
+
+    # generate random acquirer EMV info from the above
     
     iso8583_rq = ISO8583_0200_FinReq(
         
@@ -44,6 +53,8 @@ def handle_new_card_payment_request_from_merchant_pos(
             payment_processor_payment_reference=payment_reference_str
         )
     )
+
+    # create and persist payment record
 
     return PaymentProcessorNewCardPaymentResponse(
         successful = iss_bank_new_pmt_rsp.authorized,
