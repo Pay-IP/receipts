@@ -22,5 +22,5 @@ class PaymentProcessorNewPaymentClient(ServiceClientBase):
                 currency=currency,
                 currency_amt=currency_amt,
                 invoice_timestamp=serialize_datetime(timestamp),
-                reference=reference
+                merchant_reference=reference
         ))

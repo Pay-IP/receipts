@@ -83,8 +83,9 @@ class InvoicePayment(WriteModelBase):
         nullable=False
     )
     payment_processor = relationship('PaymentProcessor', lazy=False)
-
     payment_processor_reference = Column(String(254), nullable=False)
+
+    terminal_emv_receipt = Column(String, nullable=False)
 
     successful = Column(Boolean, unique=False, default=False, nullable=False)
 

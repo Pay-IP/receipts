@@ -1,9 +1,12 @@
 from pydantic import BaseModel
 
-from model.write_model.objects.emv import AcquirerEmvTransactionData, IssuerEmvTransactionData
+from model.write_model.objects.emv import ISO8583_0200_FinReq, ISO8583_0210_FinRsp
 
 class IssuingBankNewCardPaymentRequest(BaseModel):
-    acquirer_emv_data: AcquirerEmvTransactionData
+
+    payment_processor_payment_reference: str
+    iso8583_0200_fin_req: ISO8583_0200_FinReq
 
 class IssuingBankNewCardPaymentResponse(BaseModel):
-    issuer_emv_data: IssuerEmvTransactionData
+    iso8583_0210_fin_rsp: ISO8583_0210_FinRsp
+    authorized: bool

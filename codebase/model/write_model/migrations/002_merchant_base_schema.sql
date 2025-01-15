@@ -106,6 +106,8 @@ CREATE TABLE merchant_invoice_payment (
 
     payment_processor_reference VARCHAR(254) NOT NULL,
 
+    terminal_emv_receipt VARCHAR NOT NULL,
+
     successful BOOLEAN NOT NULL
 );
 

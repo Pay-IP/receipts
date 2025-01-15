@@ -2,17 +2,16 @@ import datetime
 import uuid
 from model.orm.query import insert_all, insert_one, select_all, select_on_filters, select_on_id
 from model.write_model.objects.currency import Currency
+from model.write_model.objects.emv import TerminalEmvReceipt
 from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, InvoiceReceipt, PaymentProcessor
 from services.merchant_pos_new_checkout.calc import new_merchant_invoice
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestItem, MerchantPosNewCheckoutResponse
 from services.platform_new_receipt.client import PlatformNewReceiptClient
-from services.platform_new_receipt.rqrsp import PlatformPaymentChannelEnum, PlatformPaymentChannelPaymentData, PlatformReceiptLine, PlatformReceiptRequest, PlatformReceiptTotals
+from services.platform_new_receipt.rqrsp import ReceiptLine, PlatformReceiptRequest, ReceiptTotals
 from services.pmt_proc_new_pmt.client import PaymentProcessorNewPaymentClient
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewCardPaymentResponse
 from util.service.service_config_base import ServiceConfig
-from util.web import deserialize_datetime, serialize_datetime, serialize_uuid
-
-
+from util.web import serialize_datetime, serialize_uuid
 def construct_and_persist_core_invoice(
     db_engine,
     currency_str: str,
@@ -61,7 +60,7 @@ def construct_and_persist_core_invoice(
 
     return invoice
 
-def execute_customer_invoice_payment_via_payment_processor(
+def execute_invoice_payment(
     db_engine, 
     invoice: Invoice
 ) -> InvoicePayment:
@@ -73,16 +72,12 @@ def execute_customer_invoice_payment_via_payment_processor(
     pmt_proc_rsp: PaymentProcessorNewCardPaymentResponse = PaymentProcessorNewPaymentClient().new_card_payment(
         currency=invoice.currency.iso3,
         currency_amt=invoice.total_amount_after_tax,
-        invoice_timestamp=invoice.timestamp,
+        timestamp=invoice.timestamp,
         reference=serialize_uuid(merchant_unique_payment_reference)
     )
 
-    # failure cases
-
-    if pmt_proc_rsp.original_merchant_reference != serialize_uuid(merchant_unique_payment_reference):
-        return None
-
     if not pmt_proc_rsp.successful:
+        # TODO basic handling
         return None
 
     # create payment and link to invoice
@@ -90,16 +85,18 @@ def execute_customer_invoice_payment_via_payment_processor(
     return insert_one(
         InvoicePayment(
 
-            invoice = invoice,
+            invoice_id = invoice.id,
+            successful = pmt_proc_rsp.successful,
+            timestamp = datetime.datetime.now(),
 
+            # TODO confirm against rsp
             currency = invoice.currency,
             currency_amount = invoice.total_amount_after_tax,
 
             payment_processor = payment_processor,
-            payment_processor_reference = pmt_proc_rsp.reference,
+            payment_processor_reference = pmt_proc_rsp.payment_processor_payment_reference,
 
-            successful = pmt_proc_rsp.successful,
-            timestamp =  deserialize_datetime(pmt_proc_rsp.timestamp)
+            terminal_emv_receipt = pmt_proc_rsp.terminal_emv_receipt.model_dump_json()
         ), 
         db_engine
     )
@@ -113,39 +110,34 @@ def create_receipt_for_invoice_and_submit_to_platform(
 
     receipt: InvoiceReceipt = insert_one(
         InvoiceReceipt(
-            # invoice = invoice,
             invoice_id = invoice.id
         ), 
         db_engine=db_engine
     )
 
     payment_matching_criteria = { 'invoice_id': invoice.id, 'successful': True }
-    
-    payments: list[InvoicePayment] = select_on_filters(db_engine, InvoicePayment, payment_matching_criteria)
-    successful_payment_count = len(payments)
+    successful_payments: list[InvoicePayment] = select_on_filters(db_engine, InvoicePayment, payment_matching_criteria)
+    successful_payment_count = len(successful_payments)
     if successful_payment_count != 1:
         raise Exception(f'in order to generate a receipt, invoice {invoice_id} must have exactly one successful payment, not {successful_payment_count}')
     
-    payment = payments[0]
+    payment = successful_payments[0]
 
     platform_receipt_rq = PlatformReceiptRequest(
         merchant_reference = str(receipt.id),
         invoice_datetime = serialize_datetime(invoice.timestamp),
         invoice_currency = invoice.currency.iso3,
-        invoice_lines = [PlatformReceiptLine(
+        invoice_lines = [ReceiptLine(
             description=line.sku.name,
             count=line.sku_count,
             total_amount=line.currency_amount*line.sku_count
         ) for line in invoice.lines],
-        invoice_totals = PlatformReceiptTotals(
+        invoice_totals = ReceiptTotals(
             total_amount_before_tax = invoice.total_amount_before_tax,
             sales_tax_amount = invoice.sales_tax_amount,
             total_amount_after_tax = invoice.total_amount_after_tax
         ),
-        payment_channel_payment_data = PlatformPaymentChannelPaymentData(
-            payment_channel=PlatformPaymentChannelEnum.CARD.value,
-            payment_channel_payment_reference=payment.payment_processor_reference
-        )
+        terminal_emv_receipt=TerminalEmvReceipt.parse_raw(payment.terminal_emv_receipt)
     )
 
     platform_receipt_rsp = PlatformNewReceiptClient().post(
@@ -154,17 +146,17 @@ def create_receipt_for_invoice_and_submit_to_platform(
 
     return True
 
-
 def handle_merchant_pos_new_checkout_request(
     config: ServiceConfig, 
     rq: MerchantPosNewCheckoutRequest
 ):
     
     db_engine = config.write_model_db_engine()
+
     invoice = construct_and_persist_core_invoice(db_engine, rq.currency, rq.items)
-    customer_payment = execute_customer_invoice_payment_via_payment_processor(db_engine, invoice)
+    invoice_payment = execute_invoice_payment(db_engine, invoice)
     create_receipt_for_invoice_and_submit_to_platform(db_engine, invoice.id)
 
     return MerchantPosNewCheckoutResponse(
-        successful=customer_payment.successful
+        successful=invoice_payment.successful
     )

@@ -1,19 +1,19 @@
 from pydantic import BaseModel
 
-class AcquirerEmvTransactionData(BaseModel):
+class ISO8583_0200_FinReq(BaseModel):
 
     date: str
     time: str    
     currency_code: str
-    total: int
+    currency_amount: int
     
     pan: str
 
     emv_application_label: str
-    AID: str
+    application_ID: str
     CTQ: str
-    TVR: str
-    AC: str
+    terminal_verification_results: str
+    application_cryptogram: str
     terminal_serial_number: str
 
     terminal_system_trace_audit_number: str
@@ -23,7 +23,14 @@ class AcquirerEmvTransactionData(BaseModel):
     merchant_address: str
 
 
-class IssuerEmvTransactionData(BaseModel):
-
+class ISO8583_0210_FinRsp(BaseModel):
     approved: bool  
-    authorization_rsp_id: str
+    authorization_response_identifier: str
+
+class ISO8583_02_Messages(BaseModel):
+    iso_0200_fin_req: ISO8583_0200_FinReq
+    iso_0210_fin_rsp: ISO8583_0210_FinRsp
+
+class TerminalEmvReceipt(BaseModel):
+    iso_0200_fin_req: ISO8583_0200_FinReq
+    iso_0210_fin_rsp: ISO8583_0210_FinRsp
