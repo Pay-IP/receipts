@@ -2,7 +2,7 @@ import datetime
 import random
 import uuid
 from model.orm.query import insert_one, select_all, select_on_id
-from model.write_model.objects.emv import ISO8583_0200_FinReqMsg, TerminalEmvReceipt, formatted_terminal_serial_number, formatted_transaction_date, formatted_transaction_time, formatted_system_trace_audit_number, random_emv_CTQ, random_emv_application_cryptogram, formatted_retrieval_reference_number, random_terminal_verification_results, formatted_unique_transaction_identifier
+from model.write_model.objects.emv import ISO8583_0200_FinReqMsg, ISO8583_02x0_MsgPair, TerminalEmvReceipt, formatted_terminal_serial_number, formatted_transaction_date, formatted_transaction_time, formatted_system_trace_audit_number, random_emv_CTQ, random_emv_application_cryptogram, formatted_retrieval_reference_number, random_terminal_verification_results, formatted_unique_transaction_identifier
 from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccount
 from model.write_model.objects.payment_processor_write_model import PaymentProcessorMerchant, PaymentProcessorMerchantTSN, PaymentProcessorSystemTraceAuditNumber
 from services.iss_bank_new_pmt.client import IssuingBankNewCardPaymentClient
@@ -67,13 +67,12 @@ def handle_new_card_payment_request_from_merchant_pos(
         retrieval_reference_number = formatted_retrieval_reference_number(transaction_timestamp)
     )
 
-    payment_reference = uuid.uuid4()
-    payment_reference_str = serialize_uuid(payment_reference)
+    payment_id = uuid.uuid4()
 
     iss_bank_new_pmt_rsp: IssuingBankNewCardPaymentResponse = IssuingBankNewCardPaymentClient().post(
         IssuingBankNewCardPaymentRequest(
             iso_0200_fin_req=iso_0200_msg,
-            payment_processor_payment_reference=payment_reference_str
+            payment_processor_payment_id=payment_id
         )
     )
 
@@ -81,9 +80,11 @@ def handle_new_card_payment_request_from_merchant_pos(
 
     return PaymentProcessorNewCardPaymentResponse(
         successful = iss_bank_new_pmt_rsp.iso_0200_fin_rsp.authorized,
-        payment_processor_payment_reference = payment_reference,
+        payment_processor_payment_reference = payment_id,
         terminal_emv_receipt = TerminalEmvReceipt(
-            iso_0200_fin_req = iso_0200_msg, 
-            iso_0210_fin_rsp = iss_bank_new_pmt_rsp.iso_0200_fin_rsp
+            iso=ISO8583_02x0_MsgPair(
+                rq = iso_0200_msg, 
+                rsp = iss_bank_new_pmt_rsp.iso_0200_fin_rsp
+            )
         )
     )

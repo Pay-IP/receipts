@@ -7,6 +7,9 @@ emv_transaction_date_format_str = '%Y%M%D'
 emv_transaction_time_format_str = '%H%M%S' 
 emv_retrieval_reference_number_format_str = '%YY%M%D%H%M%S'
 
+def mask_pan(pan: str) -> str:
+    return pan[:6] + 'X'*len(pan[6:-4]) + pan[-4:]
+
 def random_card_pan_for_bin(bin: str, length: int = 16):
     suffix = ''.join(random.sample('0123456789', length - len(bin)))
     return f'{bin}{suffix}'
@@ -87,9 +90,10 @@ class ISO8583_0210_FinRspMsg(BaseModel):
     authorization_response_identifier: str
 
 class ISO8583_02x0_MsgPair(BaseModel):
-    iso_0200_fin_req: ISO8583_0200_FinReqMsg
-    iso_0210_fin_rsp: ISO8583_0210_FinRspMsg
+    rq: ISO8583_0200_FinReqMsg
+    rsp: ISO8583_0210_FinRspMsg
 
-class TerminalEmvReceipt(BaseModel):
-    iso_0200_fin_req: ISO8583_0200_FinReqMsg
-    iso_0210_fin_rsp: ISO8583_0210_FinRspMsg
+class TerminalEmvReceipt(BaseModel): # TODO = create receipt fields from the iso msgs
+    iso: ISO8583_02x0_MsgPair
+
+    

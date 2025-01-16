@@ -43,8 +43,8 @@ def handle_issuing_bank_new_payment_request_from_payment_processor(
     client_ac, iso_0210_fin_rsp = authorize_customer_account_payment_request(config.write_model_db_engine(), rq.iso_0200_fin_req)   
 
     iso_msgs = ISO8583_02x0_MsgPair(
-        iso_0200_fin_req=rq.iso_0200_fin_req,
-        iso_0210_fin_rsp=iso_0210_fin_rsp
+        rq=rq.iso_0200_fin_req,
+        rsp=iso_0210_fin_rsp
     )
 
     platform_new_pmt_rsp = PlatformNewPaymentClient().post(
