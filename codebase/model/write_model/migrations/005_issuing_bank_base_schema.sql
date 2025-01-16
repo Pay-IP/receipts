@@ -58,5 +58,8 @@ CREATE TABLE issuing_bank_client_account_debit (
     platform_receipt_id INTEGER NULL,
     CONSTRAINT fk_issuing_bank_client_account_debit_platform_receipt_id
         FOREIGN KEY(platform_receipt_id) 
-	    REFERENCES issuing_bank_platform_receipt(id)
+	    REFERENCES issuing_bank_platform_receipt(id),
+
+    emv_rq JSON,
+    emv_rsp JSON
 );

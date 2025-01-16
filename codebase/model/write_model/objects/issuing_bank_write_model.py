@@ -1,10 +1,11 @@
-from sqlalchemy import Column, Integer, DateTime, String
+import uuid
+from sqlalchemy import Column, Integer, DateTime, String, JSON
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from model.write_model.objects.write_model_base import WriteModelBase
-from model.write_model.objects.currency import Currency
+from model.write_model.objects.currency import Currency # DO NOT DELETE - this is required for the ORM
 
 class IssuingBankClientAccount(WriteModelBase):
     __tablename__ = 'issuing_bank_client_account'
@@ -17,8 +18,8 @@ class IssuingBankClientAccount(WriteModelBase):
     currency_id = Column('currency_id', ForeignKey('currency.id'), nullable=False)
     currency = relationship('Currency', lazy=False)
 
-    external_client_id = Column(UUID(as_uuid=True), nullable=False)
-    external_account_id = Column(UUID(as_uuid=True), nullable=False)
+    external_client_id = Column(UUID(as_uuid=True), nullable=False, default=uuid.uuid4)
+    external_account_id = Column(UUID(as_uuid=True), nullable=False, default=uuid.uuid4)
 
     card_pan = Column(String(19), nullable=False)
     card_aid = Column(String(32), nullable=False)
@@ -44,8 +45,8 @@ class IssuingBankClientAccountDebit(WriteModelBase):
     timestamp = Column(DateTime(timezone=True), nullable=False) 
 
     platform_receipt_id = Column('platform_receipt_id', ForeignKey('issuing_bank_platform_receipt.id'), nullable=True)
-    platform_receipt = relationship('IssuingBankPlatformReceipt', lazy=False) 
+    platform_receipt = relationship('IssuingBankPlatformReceipt', lazy=False)
 
-
-
+    emv_rq = Column(JSON)
+    emv_rsp = Column(JSON)
 

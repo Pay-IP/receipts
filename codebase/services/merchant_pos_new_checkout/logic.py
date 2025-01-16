@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from model.orm.query import insert_all, insert_one, select_all, select_on_filters, select_on_id
+from model.orm.query import insert_all, insert_one, select_all, select_all_on_filters, select_on_id
 from model.write_model.objects.currency import Currency
 from model.write_model.objects.emv import TerminalEmvReceipt
 from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, InvoiceReceipt, PaymentProcessor
@@ -115,7 +115,7 @@ def create_receipt_for_invoice_and_submit_to_platform(
         db_engine=db_engine
     )
 
-    successful_payments: list[InvoicePayment] = select_on_filters(
+    successful_payments: list[InvoicePayment] = select_all_on_filters(
         InvoicePayment, 
         { 'invoice_id': invoice.id, 'successful': True }, 
         db_engine
