@@ -14,8 +14,7 @@ CREATE TABLE issuing_bank_client_account (
         FOREIGN KEY(currency_id) 
 	    REFERENCES currency(id),
 
-    external_client_id UUID NOT NULL UNIQUE,
-    external_account_id UUID NOT NULL UNIQUE,
+    external_id UUID NOT NULL UNIQUE,
 
     card_pan VARCHAR(19) NOT NULL UNIQUE,
     card_aid VARCHAR(32) NOT NULL,
@@ -30,13 +29,9 @@ CREATE TABLE issuing_bank_platform_receipt (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
 
-    client_account_id INTEGER NOT NULL,
-    CONSTRAINT fk_issuing_bank_client_account_debit_client_account_id
-        FOREIGN KEY(client_account_id) 
-	    REFERENCES issuing_bank_client_account(id),
+    platform_id UUID NOT NULL UNIQUE,
 
-    platform_reference UUID NOT NULL UNIQUE,
-    receipt_json VARCHAR NOT NULL
+    receipt VARCHAR NOT NULL
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

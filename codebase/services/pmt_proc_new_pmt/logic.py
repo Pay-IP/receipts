@@ -80,10 +80,10 @@ def handle_new_card_payment_request_from_merchant_pos(
     # create and persist payment record
 
     return PaymentProcessorNewCardPaymentResponse(
-        successful = iss_bank_new_pmt_rsp.authorized,
-        payment_processor_payment_reference = serialize_uuid(payment_reference),
+        successful = iss_bank_new_pmt_rsp.iso_0200_fin_rsp.authorized,
+        payment_processor_payment_reference = payment_reference,
         terminal_emv_receipt = TerminalEmvReceipt(
             iso_0200_fin_req = iso_0200_msg, 
-            iso_0210_fin_rsp = iss_bank_new_pmt_rsp.iso_0210_fin_rsp
+            iso_0210_fin_rsp = iss_bank_new_pmt_rsp.iso_0200_fin_rsp
         )
     )

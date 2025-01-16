@@ -11,6 +11,9 @@ def random_card_pan_for_bin(bin: str, length: int = 16):
     suffix = ''.join(random.sample('0123456789', length - len(bin)))
     return f'{bin}{suffix}'
 
+def random_auth_rsp_id():
+    return ''.join(random.sample('0123456789', 6))
+
 def formatted_transaction_date(
         timestamp: datetime.datetime,
         format_str = emv_transaction_date_format_str
@@ -83,7 +86,7 @@ class ISO8583_0210_FinRspMsg(BaseModel):
     authorized: bool  
     authorization_response_identifier: str
 
-class ISO8583_02_RqRsp(BaseModel):
+class ISO8583_02x0_MsgPair(BaseModel):
     iso_0200_fin_req: ISO8583_0200_FinReqMsg
     iso_0210_fin_rsp: ISO8583_0210_FinRspMsg
 

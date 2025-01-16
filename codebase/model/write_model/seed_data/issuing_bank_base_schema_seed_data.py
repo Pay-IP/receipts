@@ -28,8 +28,7 @@ def seed_issuing_bank_client_accounts(db_engine: Engine):
             seed_client_accounts = [
                 IssuingBankClientAccount(
                     currency_id = currency.id,
-                    external_client_id = uuid.uuid4(),
-                    external_account_id = uuid.uuid4(),
+                    external_id = uuid.uuid4(),
                     name = 'Software Developer',
                     age = random.randint(min_age, max_age),
                     card_pan = random_card_pan_for_bin(bin),
@@ -38,8 +37,7 @@ def seed_issuing_bank_client_accounts(db_engine: Engine):
                 ),
                 IssuingBankClientAccount(
                     currency_id = currency.id,
-                    external_client_id = uuid.uuid4(),
-                    external_account_id = uuid.uuid4(),
+                    external_id = uuid.uuid4(),
                     name = 'Data Scientist',
                     age = random.randint(min_age, max_age),
                     card_pan = random_card_pan_for_bin(bin),
@@ -48,8 +46,7 @@ def seed_issuing_bank_client_accounts(db_engine: Engine):
                 ),
                 IssuingBankClientAccount(
                     currency_id = currency.id,
-                    external_client_id = uuid.uuid4(),
-                    external_account_id = uuid.uuid4(),
+                    external_id = uuid.uuid4(),
                     name = 'FinTech CEO',
                     age = random.randint(min_age, max_age),
                     card_pan = random_card_pan_for_bin(bin),
@@ -58,8 +55,7 @@ def seed_issuing_bank_client_accounts(db_engine: Engine):
                 ),
                 IssuingBankClientAccount(
                     currency_id = currency.id,
-                    external_client_id = uuid.uuid4(),
-                    external_account_id = uuid.uuid4(),
+                    external_id = uuid.uuid4(),
                     name = 'Venture Capitalist',
                     age = random.randint(min_age, max_age),
                     card_pan = random_card_pan_for_bin(bin),

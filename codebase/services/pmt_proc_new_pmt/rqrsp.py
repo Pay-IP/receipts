@@ -1,3 +1,4 @@
+from uuid import UUID
 from pydantic import BaseModel
 
 from model.write_model.objects.emv import TerminalEmvReceipt
@@ -12,6 +13,6 @@ class PaymentProcessorNewCardPaymentRequest(BaseModel):
 class PaymentProcessorNewCardPaymentResponse(BaseModel):
 
     successful: bool
-    payment_processor_payment_reference: str
+    payment_processor_payment_reference: UUID
     terminal_emv_receipt: TerminalEmvReceipt 
     
