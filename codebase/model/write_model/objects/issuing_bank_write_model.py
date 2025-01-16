@@ -21,6 +21,8 @@ class IssuingBankClientAccount(WriteModelBase):
     external_account_id = Column(UUID(as_uuid=True), nullable=False)
 
     card_pan = Column(String(19), nullable=False)
+    card_aid = Column(String(32), nullable=False)
+    card_app_label = Column(String(20), nullable=False)
 
 class IssuingBankPlatformReceipt(WriteModelBase):
     __tablename__ = 'issuing_bank_platform_receipt'

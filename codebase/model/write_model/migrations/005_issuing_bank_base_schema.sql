@@ -17,7 +17,9 @@ CREATE TABLE issuing_bank_client_account (
     external_client_id UUID NOT NULL UNIQUE,
     external_account_id UUID NOT NULL UNIQUE,
 
-    card_pan VARCHAR(19) NOT NULL UNIQUE
+    card_pan VARCHAR(19) NOT NULL UNIQUE,
+    card_aid VARCHAR(32) NOT NULL,
+    card_app_label VARCHAR(20) NOT NULL
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-

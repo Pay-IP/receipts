@@ -34,8 +34,7 @@ def handle_issuing_bank_new_payment_request_from_payment_processor(
 
     # verify customer    
     internal_customer_id = customer_id_from_pan(rq.iso_0200_fin_req.pan)
-    emv_authorization_rsp = authorize_customer_payment(internal_customer_id, rq.iso_0200_fin_req)
-
+    emv_authorization_rsp = authorize_customer_payment(internal_customer_id, rq.iso_0200_fin_req)   
     anonymized_external_facing_customer_id = anonymous_external_facing_customer_id_for_internal_customer_id(internal_customer_id)
 
     platform_new_pmt_rsp = PlatformNewPaymentClient().post(

@@ -1,9 +1,10 @@
+import datetime
 import random
 import uuid
 from model.orm.query import insert_one, select_all, select_on_id
-from model.write_model.objects.emv import ISO8583_0200_FinReqMsg, TerminalEmvReceipt
+from model.write_model.objects.emv import ISO8583_0200_FinReqMsg, TerminalEmvReceipt, formatted_terminal_serial_number, formatted_transaction_date, formatted_transaction_time, formatted_system_trace_audit_number, random_emv_CTQ, random_emv_application_cryptogram, formatted_retrieval_reference_number, random_terminal_verification_results, formatted_unique_transaction_identifier
 from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccount
-from model.write_model.objects.payment_processor_write_model import PaymentProcessorMerchant, PaymentProcessorMerchantTSN
+from model.write_model.objects.payment_processor_write_model import PaymentProcessorMerchant, PaymentProcessorMerchantTSN, PaymentProcessorSystemTraceAuditNumber
 from services.iss_bank_new_pmt.client import IssuingBankNewCardPaymentClient
 from services.iss_bank_new_pmt.rqrsp import IssuingBankNewCardPaymentRequest, IssuingBankNewCardPaymentResponse
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewCardPaymentRequest, PaymentProcessorNewCardPaymentResponse
@@ -22,37 +23,48 @@ def handle_new_card_payment_request_from_merchant_pos(
     # this would normally happen out-of-band
     #
     issuing_bank_client_ac = random.sample(select_all(IssuingBankClientAccount, db_engine), 1)[0]
-    card_pan = issuing_bank_client_ac.card_pan
-
-    # generate acquirer EMV info from the above
 
     merchant_tsn =  PaymentProcessorMerchantTSN(merchant_id = merchant.id)
     merchant_tsn = insert_one(merchant_tsn, db_engine)
-    merchant_tsn_str = str(merchant_tsn.tsn) # TODO generic correct serialization
+    tsn = formatted_terminal_serial_number(merchant_tsn.tsn)
+
+    stan =  PaymentProcessorSystemTraceAuditNumber()
+    stan = insert_one(stan, db_engine)
+
+    guid = uuid.uuid4()
+
+    transaction_timestamp = datetime.datetime.now()
+
+    card_acc_idc = '000000002915551'
 
     iso_0200_msg = ISO8583_0200_FinReqMsg(
         
-        transaction_date = '',
-        transaction_time = '',   
+        transaction_date_str = formatted_transaction_date(transaction_timestamp),
+        transaction_time_str = formatted_transaction_time(transaction_timestamp),
         
-        currency_code = '',
-        currency_amount = 0,
+        currency_code = rq.currency,
+        currency_amount = rq.currency_amt,
 
         merchant_address = merchant.address,
 
-        pan = card_pan,
-        terminal_serial_number = merchant_tsn_str, # TODO generic correct serialization
-        terminal_system_trace_audit_number = '',
+        pan = issuing_bank_client_ac.card_pan,
+        terminal_serial_number = tsn,
+        terminal_system_trace_audit_number = formatted_system_trace_audit_number(stan),
 
-        emv_application_label = '',
-        application_ID = '',
+        emv_application_label = issuing_bank_client_ac.card_app_label,
+        application_ID = issuing_bank_client_ac.card_aid,
 
-        CTQ = '',
-        terminal_verification_results = '',
-        application_cryptogram = '',
+        CTQ = random_emv_CTQ(),
+        terminal_verification_results = random_terminal_verification_results(),
+        application_cryptogram = random_emv_application_cryptogram(),
 
-        unique_transaction_identifier = '',
-        retrieval_reference_number = ''
+        unique_transaction_identifier = formatted_unique_transaction_identifier(
+            guid,
+            card_acc_idc,
+            tsn
+        ),
+
+        retrieval_reference_number = formatted_retrieval_reference_number(transaction_timestamp)
     )
 
     payment_reference = uuid.uuid4()

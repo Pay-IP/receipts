@@ -1,16 +1,11 @@
 import random
 import uuid
 from model.write_model.objects.currency import Currency
+from model.write_model.objects.emv import random_card_pan
 from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccount
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
-
-
-def random_card_pan(bin: str, length: int = 16):
-
-    suffix = ''.join(random.sample('0123456789', 10))
-    return f'{bin}{suffix}'
 
 def seed_issuing_bank_client_accounts(db_engine: Engine):
 
@@ -25,17 +20,21 @@ def seed_issuing_bank_client_accounts(db_engine: Engine):
 
             min_age = 18
             max_age = 65
-
-            pan_bin = '484795'
+            
+            bin = '484795'
+            aid = 'A0000000031010'
+            application_label = 'Visa Debit'
 
             seed_client_accounts = [
                 IssuingBankClientAccount(
                     currency_id = currency.id,
                     external_client_id = uuid.uuid4(),
                     external_account_id = uuid.uuid4(),
-                    name = 'Software Engineer',
+                    name = 'Software Developer',
                     age = random.randint(min_age, max_age),
-                    card_pan = random_card_pan(pan_bin),
+                    card_pan = random_card_pan(bin),
+                    card_aid = aid,
+                    card_app_label = application_label
                 ),
                 IssuingBankClientAccount(
                     currency_id = currency.id,
@@ -43,15 +42,19 @@ def seed_issuing_bank_client_accounts(db_engine: Engine):
                     external_account_id = uuid.uuid4(),
                     name = 'Data Scientist',
                     age = random.randint(min_age, max_age),
-                    card_pan = random_card_pan(pan_bin),
+                    card_pan = random_card_pan(bin),
+                    card_aid = aid,
+                    card_app_label = application_label
                 ),
                 IssuingBankClientAccount(
                     currency_id = currency.id,
                     external_client_id = uuid.uuid4(),
                     external_account_id = uuid.uuid4(),
-                    name = 'Maverick FinTech CEO',
+                    name = 'FinTech CEO',
                     age = random.randint(min_age, max_age),
-                    card_pan = random_card_pan(pan_bin),
+                    card_pan = random_card_pan(bin),
+                    card_aid = aid,
+                    card_app_label = application_label
                 ),
                 IssuingBankClientAccount(
                     currency_id = currency.id,
@@ -59,7 +62,9 @@ def seed_issuing_bank_client_accounts(db_engine: Engine):
                     external_account_id = uuid.uuid4(),
                     name = 'Venture Capitalist',
                     age = random.randint(min_age, max_age),
-                    card_pan = random_card_pan(pan_bin),
+                    card_pan = random_card_pan(bin),
+                    card_aid = aid,
+                    card_app_label = application_label
                 )
             ]
 

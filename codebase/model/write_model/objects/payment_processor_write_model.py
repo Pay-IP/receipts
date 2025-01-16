@@ -25,6 +25,10 @@ class PaymentProcessorMerchantTSN(WriteModelBase):
     merchant_id = Column('merchant_id', ForeignKey('payment_processor_merchant.id'), nullable=False)
     merchant = relationship('PaymentProcessorMerchant', lazy=False)
 
+class PaymentProcessorSystemTraceAuditNumber(WriteModelBase):
+    __tablename__ = 'payment_processor_system_trace_audit_number'
+    stan = Column(Integer, primary_key=True)
+
 class PaymentProcessorMerchantPayment(WriteModelBase):
     __tablename__ = 'payment_processor_merchant_payment'
 
