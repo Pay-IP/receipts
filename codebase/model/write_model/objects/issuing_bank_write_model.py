@@ -38,6 +38,7 @@ class IssuingBankClientAccountDebit(WriteModelBase):
     __tablename__ = 'issuing_bank_client_account_debit'
 
     id = Column(Integer, primary_key=True)    
+    external_id = Column(UUID(as_uuid=True), nullable=False)
 
     client_account_id = Column('client_account_id', ForeignKey('issuing_bank_client_account.id'), nullable=False)
     client_account = relationship('IssuingBankClientAccount', lazy=False)

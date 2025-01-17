@@ -101,7 +101,7 @@ CREATE TABLE platform_bank_client_ac_payment (
 	    REFERENCES platform_bank_client_ac(id),
 
     system_timestamp TIMESTAMPTZ NOT NULL,
-
+    source_system_id UUID NOT NULL,
     payment JSON
 );
 
@@ -119,7 +119,7 @@ CREATE TABLE platform_merchant_receipt (
 	    REFERENCES platform_merchant(id),
 
     system_timestamp TIMESTAMPTZ NOT NULL,
-
+    source_system_id UUID NOT NULL,
     receipt JSON
 );
 

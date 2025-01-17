@@ -7,6 +7,7 @@ class PlatformNewPaymentRequest(BaseModel):
     
     iso_msgs: ISO8583_02x0_MsgPair
     issuer_bank_customer_ac_external_id: UUID
+    source_system_id: UUID
 
 class PlatformNewPaymentResponse(BaseModel):
     successful: bool

@@ -62,11 +62,9 @@ class PlatformBankClientAccountPayment(WriteModelBase):
     bank_client_ac_id = Column('bank_client_ac_id', ForeignKey('platform_bank_client_ac.id'), nullable=False)
     bank_client_ac = relationship('PlatformBankClientAccount', lazy=False)
 
-    client_age = Column(Integer, nullable=False)
-    client_postal_code = Column(String(254), nullable=False)
-
     system_timestamp = Column(DateTime(timezone=True), nullable=False)
 
+    source_system_id = Column(UUID(as_uuid=True), nullable=False)
     payment = Column(JSON, nullable=False)
 
 class PlatformMerchantReceipt(WriteModelBase):

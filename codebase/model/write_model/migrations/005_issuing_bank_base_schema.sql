@@ -43,6 +43,8 @@ CREATE TABLE issuing_bank_client_account_debit (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
 
+    external_id UUID NOT NULL UNIQUE,
+
     client_account_id INTEGER NOT NULL,
     CONSTRAINT fk_issuing_bank_client_account_debit_client_account_id
         FOREIGN KEY(client_account_id) 
