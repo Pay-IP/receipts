@@ -75,5 +75,5 @@ def seed_issuing_bank_client_accounts(db_engine: Engine):
             db_session.flush()
 
 
-def seed_issuing_bank_base_schema(db_engine: Engine):
+def seed_issuing_bank_write_model(db_engine: Engine):
     seed_issuing_bank_client_accounts(db_engine)

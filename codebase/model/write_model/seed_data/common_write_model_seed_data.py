@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
 
 
-def seed_common_base_schema(db_engine: Engine):
+def seed_common_write_model(db_engine: Engine):
    
     seed_currencies = [
         # Currency(iso3='BTC', decimal_places=8),

@@ -52,7 +52,7 @@ def seed_merchant_payment_processors(db_engine: Engine):
             db_session.flush()
 
 
-def seed_merchant_base_schema(db_engine: Engine):
+def seed_merchant_write_model(db_engine: Engine):
 
     seed_merchant_skus(db_engine)
     seed_merchant_payment_processors(db_engine)

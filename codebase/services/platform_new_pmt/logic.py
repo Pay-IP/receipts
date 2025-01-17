@@ -5,6 +5,20 @@ def handle_platform_new_payment_request_from_customer_bank(
     config: ServiceConfig,
     rq: PlatformNewPaymentRequest
 ):
+    
+    # model
+    #
+    # receipt side
+    # - merchant 
+    # - merchant receipt with payment details
+
+    # payment side
+    # - customer_ac (id obtained from bankZ)
+    # - (customer) payment
+    #
+    # - customer account = our identity for the customer
+    # - merchant payment
+
 
     return PlatformNewPaymentResponse(
         successful=True

@@ -20,8 +20,8 @@ def seed_payment_processor_merchants(db_engine: Engine):
             seed_merchants = [
                 PaymentProcessorMerchant(
                     currency_id = currency.id,
-                    name = 'Mr Price',
-                    address = 'Mr Price Clothing',
+                    name = 'Vaal Marina Supermarket',
+                    address = 'Vaal Marina Supermarket',
                 ),
             ]
 
@@ -36,5 +36,5 @@ def seed_payment_processor_merchants(db_engine: Engine):
             db_session.flush()
 
 
-def seed_payment_processor_base_schema(db_engine: Engine):
+def seed_payment_processor_write_model(db_engine: Engine):
     seed_payment_processor_merchants(db_engine)

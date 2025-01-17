@@ -36,7 +36,6 @@ CREATE TABLE payment_processor_system_trace_audit_number (
     stan SERIAL PRIMARY KEY
 );
 
-
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 -- payment_processor_merchant_payment
 
@@ -52,3 +51,5 @@ CREATE TABLE payment_processor_merchant_payment (
 
     terminal_serial_number SERIAL
 );
+
+
