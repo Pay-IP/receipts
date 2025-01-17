@@ -7,7 +7,8 @@ CREATE TABLE issuing_bank_client_account (
         PRIMARY KEY(id),
 
     name VARCHAR(254) NOT NULL UNIQUE,
-    age INTEGER NOT NULL,
+    date_of_birth DATE NOT NULL,
+    postal_code VARCHAR(254) NOT NULL,
 
     currency_id INTEGER NOT NULL,
     CONSTRAINT fk_issuing_bank_client_account_currency_id
