@@ -10,4 +10,4 @@ class PlatformNewPaymentRequest(BaseModel):
     issuer_bank_payment_id: UUID
 
 class PlatformNewPaymentResponse(BaseModel):
-    successful: bool
+    platform_payment_id: UUID

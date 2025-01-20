@@ -6,7 +6,8 @@ CREATE TABLE platform_merchant (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
 
-    name VARCHAR(254) NOT NULL UNIQUE
+    name VARCHAR(254) NOT NULL UNIQUE,
+    callback_url VARCHAR(2000) NOT NULL UNIQUE
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -34,7 +35,8 @@ CREATE TABLE platform_bank (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
 
-    name VARCHAR NOT NULL UNIQUE
+    name VARCHAR NOT NULL UNIQUE,
+    callback_url VARCHAR(2000) NOT NULL UNIQUE
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -67,7 +69,9 @@ CREATE TABLE platform_bank_client_ac (
         FOREIGN KEY(bank_id) 
 	    REFERENCES platform_bank(id),
 
-    source_system_id UUID NOT NULL
+    issuer_bank_client_ac_id UUID NOT NULL,
+
+    external_id UUID NOT NULL
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -95,7 +99,7 @@ CREATE TABLE platform_merchant_receipt (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
     external_id UUID NOT NULL,
-    source_system_id UUID NOT NULL,
+    merchant_receipt_id UUID NOT NULL,
 
     merchant_id INTEGER NOT NULL,
     CONSTRAINT fk_platform_merchant_receipt_merchant_id
@@ -115,6 +119,8 @@ CREATE TABLE platform_bank_client_ac_payment (
 
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
+    external_id UUID NOT NULL,
+    bank_payment_id UUID NOT NULL,
 
     bank_client_ac_id INTEGER NOT NULL,
     CONSTRAINT fk_platform_bank_client_ac_payment_bank_client_ac_id
@@ -122,7 +128,6 @@ CREATE TABLE platform_bank_client_ac_payment (
 	    REFERENCES platform_bank_client_ac(id),
 
     system_timestamp TIMESTAMPTZ NOT NULL,
-    source_system_id UUID NOT NULL,
     payment JSON,
 
     merchant_receipt_id INTEGER NULL

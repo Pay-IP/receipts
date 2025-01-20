@@ -19,7 +19,7 @@ def handle_new_receipt_from_merchant_pos(
         merchant = merchant,
 
         external_id = uuid.uuid4(),
-        source_system_id = merchant_receipt_data.merchant_receipt_id,
+        merchant_receipt_id = merchant_receipt_data.merchant_receipt_id,
         system_timestamp = datetime.datetime.now(),
 
         receipt = merchant_receipt_data.model_dump_json()

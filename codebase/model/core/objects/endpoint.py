@@ -2,6 +2,8 @@ from asyncio import Queue
 from dataclasses import dataclass
 from typing import Optional
 
+from urllib.parse import urlparse
+
 @dataclass(kw_only=True)
 class Endpoint:
     host: str
@@ -22,3 +24,17 @@ class DatabaseEndPoint(Endpoint):
 class QueueEndpoint(Endpoint):
     exchange: str
     queue: Queue
+
+
+def endpoint_from_url(url: str) -> Endpoint:
+
+    # urlparse("scheme://netloc/path;parameters?query#fragment")
+    components = urlparse(url)
+
+    return Endpoint(
+        protocol = components.scheme,
+        host = components.hostname,
+        port = components.port,
+        path = components.path
+    )
+    

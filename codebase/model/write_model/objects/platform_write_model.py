@@ -7,12 +7,12 @@ from model.write_model.objects.write_model_base import WriteModelBase
 
 # merchant data ---------------------------------------------------------------------------------
 
-
 class PlatformMerchant(WriteModelBase):
     __tablename__ = 'platform_merchant'
     id = Column(Integer, primary_key=True)
 
     name = Column(String(254), nullable=False)
+    callback_url = Column(String(2000), nullable=False)
 
 class PlatformMerchantConfig(WriteModelBase):
     __tablename__ = 'platform_merchant_config'
@@ -31,6 +31,7 @@ class PlatformBank(WriteModelBase):
     id = Column(Integer, primary_key=True)
     
     name = Column(String(254), nullable=False)
+    callback_url = Column(String(2000), nullable=False)
 
 class PlatformBankConfig(WriteModelBase):
     __tablename__ = 'platform_bank_config'
@@ -46,11 +47,11 @@ class PlatformBankConfig(WriteModelBase):
 class PlatformBankClientAccount(WriteModelBase):
     __tablename__ = 'platform_bank_client_ac'
     id = Column(Integer, primary_key=True)
+    issuer_bank_client_ac_id = Column(UUID(as_uuid=True), nullable=False)
+    external_id = Column(UUID(as_uuid=True), nullable=False)
 
     bank_id = Column('bank_id', ForeignKey('platform_bank.id'), nullable=False)
     bank = relationship('PlatformBank', lazy=False)
-
-    source_system_id = Column(UUID(as_uuid=True), nullable=False)
 
 class PlatformBankClientAccountMetaData(WriteModelBase):
     __tablename__ = 'platform_bank_client_ac_meta_data'
@@ -69,7 +70,7 @@ class PlatformMerchantReceipt(WriteModelBase):
 
     id = Column(Integer, primary_key=True)
     external_id = Column(UUID(as_uuid=True), nullable=False)
-    source_system_id = Column(UUID(as_uuid=True), nullable=False)
+    merchant_receipt_id = Column(UUID(as_uuid=True), nullable=False)
 
     merchant_id = Column('merchant_id', ForeignKey('platform_merchant.id'), nullable=False)
     merchant = relationship('PlatformMerchant', lazy=False)
@@ -81,13 +82,16 @@ class PlatformMerchantReceipt(WriteModelBase):
 
 class PlatformBankClientAccountPayment(WriteModelBase):
     __tablename__ = 'platform_bank_client_ac_payment'
+    
     id = Column(Integer, primary_key=True)
+    external_id = Column(UUID(as_uuid=True), nullable=False)
+    bank_payment_id = Column(UUID(as_uuid=True), nullable=False)
 
     bank_client_ac_id = Column('bank_client_ac_id', ForeignKey('platform_bank_client_ac.id'), nullable=False)
     bank_client_ac = relationship('PlatformBankClientAccount', lazy=False)
 
     system_timestamp = Column(DateTime(timezone=True), nullable=False)
-    source_system_id = Column(UUID(as_uuid=True), nullable=False)
+
 
     payment = Column(JSON, nullable=False)
 

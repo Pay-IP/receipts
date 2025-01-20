@@ -1,7 +1,9 @@
+from uuid import UUID
 from pydantic import BaseModel
 
-class IssuingBankCallbackRequest(BaseModel):
-    pass
+class PlatformPaymentMatchNotification(BaseModel):
+    platform_payment_id: UUID
+    platform_receipt_id: UUID
 
 class IssuingBankCallbackResponse(BaseModel):
-    rq: IssuingBankCallbackRequest
+    pass

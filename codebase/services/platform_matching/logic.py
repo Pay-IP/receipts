@@ -1,11 +1,16 @@
 import datetime
+from model.core.objects.endpoint import Endpoint, endpoint_from_url
 from model.query import select_all_on_filters, update_existing_items
 from model.write_model.objects.emv import ISO8583_02x0_MsgPair, mask_pan
 from model.write_model.objects.platform_common import PlatformEmvReceipt, PlatformMerchantReceiptDTO
-from model.write_model.objects.platform_write_model import PlatformBankClientAccountPayment, PlatformMerchantReceipt
+from model.write_model.objects.platform_write_model import PlatformBankClientAccount, PlatformBankClientAccountPayment, PlatformMerchantReceipt
 import schedule
 import time
 
+from services.iss_bank_callback.client import IssuingBankCallbackClient
+from services.iss_bank_callback.rqrsp import PlatformPaymentMatchNotification
+from services.merchant_pos_callback.client import MerchantPosCallbackClient
+from services.merchant_pos_callback.rqrsp import PlatformReceiptMatchNotification
 from util.service.service_config_base import ServiceConfig
 
 JOB_PERIOD_S = 1
@@ -38,12 +43,11 @@ def get_unmatched_payments(db_engine) -> list[PlatformBankClientAccountPayment]:
 
 def match_job(config: ServiceConfig):
 
-    print(f'match job running ... {datetime.datetime.now()}')
     db_engine = config.write_model_db_engine()
-    
+
     # TODO for time window
-    unmatched_payments = get_unmatched_payments(db_engine)
-    unmatched_receipts = get_unmatched_receipts(db_engine)
+    unmatched_payments: list[PlatformBankClientAccountPayment] = get_unmatched_payments(db_engine)
+    unmatched_receipts: list[PlatformMerchantReceipt] = get_unmatched_receipts(db_engine)
 
     for payment in unmatched_payments:
 
@@ -79,9 +83,33 @@ def match_job(config: ServiceConfig):
 
                 update_existing_items([receipt, payment], db_engine)
 
-                # notify merchant via callback
                 # notify bank via callback
 
+                platform_bank_client_ac: PlatformBankClientAccount = payment.bank_client_ac 
+
+                IssuingBankCallbackClient(
+                    endpoint_from_url(platform_bank_client_ac.bank.callback_url)
+                ).post(
+                    PlatformPaymentMatchNotification(
+                        platform_payment_id=payment.external_id,
+                        platform_receipt_id=receipt.external_id
+                    )
+                )
+
+                # mark payment closed (bank has been notified)
+
+                # notify merchant via callback
+
+                MerchantPosCallbackClient(
+                    endpoint_from_url(receipt.merchant.callback_url)
+                ).post(
+                    PlatformReceiptMatchNotification(
+                        platform_receipt_id=receipt.external_id,
+                        platform_client_ac_id=platform_bank_client_ac.external_id
+                    )
+                )
+
+                # mark receipt as closed (merchant has been notified)
 
 def before_launching_platform_matching_rest_server(config: ServiceConfig):
 

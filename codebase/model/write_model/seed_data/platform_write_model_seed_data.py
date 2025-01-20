@@ -15,6 +15,7 @@ def seed_platform_merchants(db_engine: Engine):
             seed_merchants = [
                 PlatformMerchant(
                     name = 'Vaal Marina Supermarket',
+                    callback_url = 'http://merchant_pos_callback:8777'
                 ),
             ]
 
@@ -45,6 +46,7 @@ def seed_platform_banks(db_engine: Engine):
             seed_banks = [
                 PlatformBank(
                     name = 'TB',
+                    callback_url = 'http://iss_bank_callback:8777'
                 ),
             ]
 
