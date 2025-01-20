@@ -10,6 +10,7 @@ from model.write_model.objects.write_model_base import WriteModelBase
 class PlatformMerchant(WriteModelBase):
     __tablename__ = 'platform_merchant'
     id = Column(Integer, primary_key=True)
+    external_id = Column(UUID(as_uuid=True), nullable=False)
 
     name = Column(String(254), nullable=False)
     callback_url = Column(String(2000), nullable=False)

@@ -5,6 +5,7 @@ CREATE TABLE platform_merchant (
 
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
+    external_id UUID NOT NULL UNIQUE,
 
     name VARCHAR(254) NOT NULL UNIQUE,
     callback_url VARCHAR(2000) NOT NULL UNIQUE

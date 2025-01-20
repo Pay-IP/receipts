@@ -19,7 +19,7 @@ def handle_callback_notification_from_platform(
     )
 
     client_ac_debit.platform_receipt_id = rq.platform_receipt_id,
-    client_ac_debit.platform_receipt = rq.platform_receipt
+    client_ac_debit.platform_receipt = rq.platform_receipt.model_dump_json()
 
     update_items([client_ac_debit], db_engine)
 

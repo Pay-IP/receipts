@@ -15,7 +15,8 @@ def seed_platform_merchants(db_engine: Engine):
             seed_merchants = [
                 PlatformMerchant(
                     name = 'Vaal Marina Supermarket',
-                    callback_url = 'http://merchant_pos_callback:8777'
+                    callback_url = 'http://merchant_pos_callback:8777',
+                    external_id = uuid.uuid4()
                 ),
             ]
 

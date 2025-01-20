@@ -15,7 +15,7 @@ def select_all_on_filters(TModel, filters: dict, engine: Engine) -> list:
     with Session(engine, expire_on_commit=False) as session:
         return session.query(TModel).filter_by(**filters).all()
 
-def select_first_on_filters(TModel, filters: dict, engine: Engine) -> list:
+def select_first_on_filters(TModel, filters: dict, engine: Engine):
     with Session(engine, expire_on_commit=False) as session:
         return session.query(TModel).filter_by(**filters).first()
 
