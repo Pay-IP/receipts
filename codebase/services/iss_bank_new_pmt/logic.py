@@ -53,7 +53,7 @@ def handle_issuing_bank_new_payment_request_from_payment_processor(
         PlatformNewPaymentRequest(
             iso_msgs=iso_msgs,
             issuer_bank_customer_ac_external_id=client_ac.external_id,
-            source_system_id=ac_debit.external_id
+            issuer_bank_payment_id=ac_debit.external_id
         )
     )
 
