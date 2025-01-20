@@ -1,13 +1,13 @@
 import datetime
 import uuid
-from model.orm.query import insert_all, insert_one, select_all, select_all_on_filters, select_on_id
+from model.query import insert_all, insert_one, select_all, select_all_on_filters, select_on_id
 from model.write_model.objects.currency import Currency
 from model.write_model.objects.emv import TerminalEmvReceipt, mask_pan
 from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, InvoiceReceipt, PaymentProcessor
+from model.write_model.objects.platform_common import PlatformEmvReceipt, PlatformMerchantReceiptDTO, PlatformReceiptLine, PlatformReceiptTotals
 from services.merchant_pos_new_checkout.calc import new_merchant_invoice
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestItem, MerchantPosNewCheckoutResponse
 from services.platform_new_receipt.client import PlatformNewReceiptClient
-from services.platform_new_receipt.rqrsp import PlatformEmvReceipt, ReceiptLine, PlatformReceiptRequest, ReceiptTotals
 from services.pmt_proc_new_pmt.client import PaymentProcessorNewPaymentClient
 from services.pmt_proc_new_pmt.rqrsp import PaymentProcessorNewCardPaymentResponse
 from util.service.service_config_base import ServiceConfig
@@ -141,7 +141,8 @@ def create_receipt_for_invoice_and_submit_to_platform(
 
     receipt: InvoiceReceipt = insert_one(
         InvoiceReceipt(
-            invoice_id = invoice.id
+            invoice_id = invoice.id,
+            external_id = uuid.uuid4()
         ), 
         db_engine=db_engine
     )
@@ -161,16 +162,16 @@ def create_receipt_for_invoice_and_submit_to_platform(
 
     platform_emv_receipt = platform_emv_receipt_from_terminal_emv_receipt(terminal_emv_receipt)
 
-    platform_receipt_rq = PlatformReceiptRequest(
-        merchant_reference = str(receipt.id),
+    platform_receipt_rq = PlatformMerchantReceiptDTO(
+        merchant_receipt_id = receipt.external_id,
         invoice_datetime = serialize_datetime(invoice.timestamp),
         invoice_currency = invoice.currency.iso3,
-        invoice_lines = [ReceiptLine(
+        invoice_lines = [PlatformReceiptLine(
             description=line.sku.name,
             count=line.sku_count,
             total_amount=line.currency_amount*line.sku_count
         ) for line in invoice.lines],
-        invoice_totals = ReceiptTotals(
+        invoice_totals = PlatformReceiptTotals(
             total_amount_before_tax = invoice.total_amount_before_tax,
             sales_tax_amount = invoice.sales_tax_amount,
             total_amount_after_tax = invoice.total_amount_after_tax

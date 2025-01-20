@@ -1,17 +1,30 @@
-
+import datetime
+import schedule
+import time
 
 from util.service.service_config_base import ServiceConfig
 
+JOB_PERIOD_S = 1
+WAIT_PERIOD_S = 0.1
 
-def before_launching_platform_matching_server(config: ServiceConfig):
 
-
-    # read_model_engine = get_tested_database_engine(database_endpoint_from_env('READ_MODEL_DB'))
-    # buy_order_q_ep: QueueEndpoint = queue_endpoint_from_env('Q', Queue.BuyOrder)
-
-    # def connect_event_listeners():
-    #     connect_blocking_q_listener(buy_order_q_ep, new_sync_buy_order(read_model_engine))        
-
-    # connect_event_listeners()
-
+def get_unmatched_receipts_for_time_window():
     pass
+
+def get_unmatched_payments_for_time_window():
+    pass
+
+
+def match_job():
+    print(f'match job running ... {datetime.datetime.now()}')
+
+
+def before_launching_platform_matching_rest_server(config: ServiceConfig):
+
+    read_model_engine = config.read_model_db_engine()
+
+    schedule.every(JOB_PERIOD_S).seconds.do(match_job)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(WAIT_PERIOD_S)

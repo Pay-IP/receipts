@@ -1,6 +1,6 @@
 import random
 import uuid
-from model.orm.query import select_all_on_filters, select_first_on_filters
+from model.query import select_all_on_filters, select_first_on_filters
 from model.write_model.objects.currency import Currency
 from model.write_model.objects.emv import random_card_pan_for_bin
 from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccount

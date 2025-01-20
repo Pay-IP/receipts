@@ -92,6 +92,7 @@ class InvoiceReceipt(WriteModelBase):
     __tablename__ = 'merchant_invoice_receipt'
 
     id = Column(Integer, primary_key=True)
+    external_id = Column(UUID(as_uuid=True), nullable=False)
     
     invoice_id = Column('invoice_id', ForeignKey('merchant_invoice.id'), nullable=False)
     invoice = relationship("Invoice", back_populates="receipts")

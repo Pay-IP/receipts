@@ -112,6 +112,8 @@ CREATE TABLE platform_merchant_receipt (
 
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
+    external_id UUID NOT NULL,
+    source_system_id UUID NOT NULL,
 
     merchant_id INTEGER NOT NULL,
     CONSTRAINT fk_platform_merchant_receipt_merchant_id
@@ -119,7 +121,6 @@ CREATE TABLE platform_merchant_receipt (
 	    REFERENCES platform_merchant(id),
 
     system_timestamp TIMESTAMPTZ NOT NULL,
-    source_system_id UUID NOT NULL,
     receipt JSON
 );
 

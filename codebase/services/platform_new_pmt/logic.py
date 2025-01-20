@@ -1,5 +1,5 @@
 import datetime
-from model.orm.query import insert_one, select_all, select_all_on_filters, select_first_on_filters
+from model.query import insert_one, select_all, select_all_on_filters, select_first_on_filters
 from model.write_model.objects.platform_write_model import PlatformBank, PlatformBankClientAccount, PlatformBankClientAccountPayment
 from services.platform_new_pmt.rqrsp import PlatformNewPaymentRequest, PlatformNewPaymentResponse
 from util.service.service_config_base import ServiceConfig

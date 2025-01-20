@@ -1,9 +1,10 @@
-from sqlalchemy import Column, Integer, DateTime, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from model.write_model.objects.write_model_base import WriteModelBase
+from model.write_model.objects.currency import Currency # DO NOT DELETE - this is required for the ORM
 
 class PaymentProcessorMerchant(WriteModelBase):
     __tablename__ = 'payment_processor_merchant'

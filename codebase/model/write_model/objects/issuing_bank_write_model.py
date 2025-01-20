@@ -26,14 +26,6 @@ class IssuingBankClientAccount(WriteModelBase):
     date_of_birth = Column(DATE, nullable=False)
     postal_code = Column(String(254), nullable=False)
 
-class IssuingBankPlatformReceipt(WriteModelBase):
-    __tablename__ = 'issuing_bank_platform_receipt'
-
-    id = Column(Integer, primary_key=True)    
-    
-    platform_id = Column(UUID(as_uuid=True), nullable=False)
-    receipt = Column(JSON, nullable=False)
-
 class IssuingBankClientAccountDebit(WriteModelBase):
     __tablename__ = 'issuing_bank_client_account_debit'
 
@@ -52,3 +44,10 @@ class IssuingBankClientAccountDebit(WriteModelBase):
     emv_rq = Column(JSON, nullable=False)
     emv_rsp = Column(JSON, nullable=False)
 
+class IssuingBankPlatformReceipt(WriteModelBase):
+    __tablename__ = 'issuing_bank_platform_receipt'
+
+    id = Column(Integer, primary_key=True)    
+    
+    platform_id = Column(UUID(as_uuid=True), nullable=False)
+    receipt = Column(JSON, nullable=False)

@@ -122,6 +122,7 @@ CREATE TABLE merchant_invoice_receipt (
 
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
+    external_id UUID NOT NULL,
 
     invoice_id INTEGER NOT NULL,
     CONSTRAINT merchant_invoice_receipt_fk_invoice_id

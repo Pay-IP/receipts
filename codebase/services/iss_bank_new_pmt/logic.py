@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from model.orm.query import insert_one, select_first_on_filters
+from model.query import insert_one, select_first_on_filters
 from model.write_model.objects.emv import ISO8583_0200_FinReqMsg, ISO8583_0210_FinRspMsg, ISO8583_02x0_MsgPair, random_auth_rsp_id
 from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccount, IssuingBankClientAccountDebit
 from services.iss_bank_new_pmt.rqrsp import IssuingBankNewCardPaymentRequest, IssuingBankNewCardPaymentResponse
