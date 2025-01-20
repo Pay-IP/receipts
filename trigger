@@ -19,4 +19,6 @@ do
 
     echo
     echo
+
+    # sleep 1
 done

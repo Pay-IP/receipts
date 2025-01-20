@@ -48,7 +48,7 @@ def handle_new_card_payment_request_from_merchant_pos(
 
         pan = issuing_bank_client_ac.card_pan,
         terminal_serial_number = tsn,
-        terminal_system_trace_audit_number = formatted_system_trace_audit_number(stan),
+        terminal_system_trace_audit_number = formatted_system_trace_audit_number(stan.stan),
 
         emv_application_label = issuing_bank_client_ac.card_app_label,
         application_ID = issuing_bank_client_ac.card_aid,

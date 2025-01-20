@@ -60,17 +60,22 @@ def match_job(config: ServiceConfig):
         for receipt in unmatched_receipts:
 
             receiptDTO = PlatformMerchantReceiptDTO.parse_raw(receipt.receipt)
-            emv: PlatformEmvReceipt = receiptDTO.emv_receipt
+            merchant_emv_receipt: PlatformEmvReceipt = receiptDTO.emv_receipt
 
             if (
-                emv.masked_pan == hpan,
-                emv.currency_amount == currency_amt,
-                emv.authorization_response_identifier == auth_id_rsp,
-                emv.transaction_date_str == txn_date
+                merchant_emv_receipt.masked_pan == hpan and
+                merchant_emv_receipt.currency_amount == currency_amt and
+                merchant_emv_receipt.authorization_response_identifier == auth_id_rsp and
+                merchant_emv_receipt.transaction_date_str == txn_date
             ):
+                
+                print(f'matched receipt {receipt.id} to payment {payment.id} on: {merchant_emv_receipt.authorization_response_identifier}')
+
+                unmatched_receipts.remove(receipt)
 
                 receipt.is_matched = True
-                payment.merchant_receipt = receipt
+
+                payment.merchant_receipt_id = receipt.id
 
                 update_existing_items([receipt, payment], db_engine)
 

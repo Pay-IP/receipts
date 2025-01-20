@@ -44,6 +44,7 @@ def update_existing_items(items, db_engine: Engine):
                 db_session.merge(item)
             
             db_session.flush()
+            db_session.commit()
 
 # new_session.merge(my_obj)
 # new_session.commit()
