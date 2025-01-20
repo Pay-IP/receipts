@@ -89,6 +89,8 @@ class ISO8583_0210_FinRspMsg(BaseModel):
     authorized: bool  
     authorization_response_identifier: str
 
+    # pan (hpan)
+
 class ISO8583_02x0_MsgPair(BaseModel):
     rq: ISO8583_0200_FinReqMsg
     rsp: ISO8583_0210_FinRspMsg

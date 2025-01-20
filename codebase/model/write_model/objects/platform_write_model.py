@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, DateTime, String, JSON
+from sqlalchemy import Column, Integer, DateTime, String, JSON, Boolean
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -64,18 +64,6 @@ class PlatformBankClientAccountMetaData(WriteModelBase):
 
 # payments and receipts  ------------------------------------------------------------------------
 
-class PlatformBankClientAccountPayment(WriteModelBase):
-    __tablename__ = 'platform_bank_client_ac_payment'
-    id = Column(Integer, primary_key=True)
-
-    bank_client_ac_id = Column('bank_client_ac_id', ForeignKey('platform_bank_client_ac.id'), nullable=False)
-    bank_client_ac = relationship('PlatformBankClientAccount', lazy=False)
-
-    system_timestamp = Column(DateTime(timezone=True), nullable=False)
-    source_system_id = Column(UUID(as_uuid=True), nullable=False)
-
-    payment = Column(JSON, nullable=False)
-
 class PlatformMerchantReceipt(WriteModelBase):
     __tablename__ = 'platform_merchant_receipt'
 
@@ -89,15 +77,19 @@ class PlatformMerchantReceipt(WriteModelBase):
     system_timestamp = Column(DateTime(timezone=True), nullable=False)
     receipt = Column(JSON, nullable=False)
 
-class PlatformMatchMerchantReceiptToBankClientAccountPayment(WriteModelBase):
-    __tablename__ = 'platfrm_match_merchant_receipt_to_bank_client_ac_payment'
-    
+    is_matched = Column(Boolean, unique=False, default=False, nullable=False)
+
+class PlatformBankClientAccountPayment(WriteModelBase):
+    __tablename__ = 'platform_bank_client_ac_payment'
     id = Column(Integer, primary_key=True)
 
-    merchant_receipt_id = Column('merchant_receipt_id', ForeignKey('platform_merchant_receipt.id'), nullable=False)
-    merchant_receipt = relationship('PlatformMerchantReceipt', lazy=False)
+    bank_client_ac_id = Column('bank_client_ac_id', ForeignKey('platform_bank_client_ac.id'), nullable=False)
+    bank_client_ac = relationship('PlatformBankClientAccount', lazy=False)
 
-    bank_client_ac_payment_id = Column('bank_client_ac_payment_id', ForeignKey('platform_bank_client_ac_payment.id'), nullable=False)
-    bank_client_ac_payment = relationship('PlatformBankClientAccountPayment', lazy=False)
+    system_timestamp = Column(DateTime(timezone=True), nullable=False)
+    source_system_id = Column(UUID(as_uuid=True), nullable=False)
 
-    timestamp = Column(DateTime(timezone=True), nullable=False)
+    payment = Column(JSON, nullable=False)
+
+    merchant_receipt_id = Column('merchant_receipt_id', ForeignKey('platform_merchant_receipt.id'), nullable=True)
+    merchant_receipt =  relationship('PlatformMerchantReceipt', lazy=True)

@@ -14,6 +14,7 @@ services=("write_model" \
 "merchant_pos_callback" \
 "platform_new_pmt" \
 "platform_new_receipt" \
+"platform_matching" \
 "pmt_proc_new_pmt" \
 "iss_bank_new_pmt" \
 "iss_bank_callback" \

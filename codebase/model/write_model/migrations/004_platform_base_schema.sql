@@ -88,24 +88,6 @@ CREATE TABLE platform_bank_client_ac_meta_data (
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
--- platform_bank_client_ac_payment
-
-CREATE TABLE platform_bank_client_ac_payment (
-
-    id INTEGER GENERATED ALWAYS AS IDENTITY,
-        PRIMARY KEY(id),
-
-    bank_client_ac_id INTEGER NOT NULL,
-    CONSTRAINT fk_platform_bank_client_ac_payment_bank_client_ac_id
-        FOREIGN KEY(bank_client_ac_id) 
-	    REFERENCES platform_bank_client_ac(id),
-
-    system_timestamp TIMESTAMPTZ NOT NULL,
-    source_system_id UUID NOT NULL,
-    payment JSON
-);
-
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 -- platform_merchant_receipt
 
 CREATE TABLE platform_merchant_receipt (
@@ -121,26 +103,32 @@ CREATE TABLE platform_merchant_receipt (
 	    REFERENCES platform_merchant(id),
 
     system_timestamp TIMESTAMPTZ NOT NULL,
-    receipt JSON
+    receipt JSON,
+
+    is_matched BOOLEAN NOT NULL
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
--- platform_merchant_receipt_for_bank_client_ac_payment 
+-- platform_bank_client_ac_payment
 
-CREATE TABLE platform_match_merchant_receipt_to_bank_client_ac_payment (
+CREATE TABLE platform_bank_client_ac_payment (
 
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
 
-    merchant_receipt_id INTEGER NOT NULL,
-    CONSTRAINT fk_platform_merchant_receipt_for_bank_client_ac_payment_merchant_receipt_id
-        FOREIGN KEY(merchant_receipt_id) 
-	    REFERENCES platform_merchant_receipt(id),
+    bank_client_ac_id INTEGER NOT NULL,
+    CONSTRAINT fk_platform_bank_client_ac_payment_bank_client_ac_id
+        FOREIGN KEY(bank_client_ac_id) 
+	    REFERENCES platform_bank_client_ac(id),
 
-    bank_client_ac_payment_id INTEGER NOT NULL,
-    CONSTRAINT fk_platform_merchant_receipt_for_bank_client_ac_payment_bank_client_ac_payment_id
-        FOREIGN KEY(bank_client_ac_payment_id) 
-	    REFERENCES platform_bank_client_ac_payment(id),
+    system_timestamp TIMESTAMPTZ NOT NULL,
+    source_system_id UUID NOT NULL,
+    payment JSON,
 
-    timestamp TIMESTAMPTZ NOT NULL
+    merchant_receipt_id INTEGER NULL
 );
+
+ALTER TABLE platform_bank_client_ac_payment
+ADD CONSTRAINT fk_platform_bank_client_ac_payment_merchant_receipt_id
+FOREIGN KEY(merchant_receipt_id) 
+REFERENCES platform_merchant_receipt(id);

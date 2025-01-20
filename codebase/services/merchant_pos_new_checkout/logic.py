@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from model.query import insert_all, insert_one, select_all, select_all_on_filters, select_on_id, update_existing
+from model.query import insert_all, insert_one, select_all, select_all_on_filters, select_on_id, update_existing_items
 from model.write_model.objects.currency import Currency
 from model.write_model.objects.emv import TerminalEmvReceipt, mask_pan
 from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, InvoiceReceipt, PaymentProcessor
@@ -184,7 +184,7 @@ def create_receipt_for_invoice_and_submit_to_platform(
     )
 
     receipt.platform_receipt_id = platform_receipt_rsp.platform_receipt_id
-    update_existing(receipt, db_engine)
+    update_existing_items([receipt], db_engine)
 
     return True
 

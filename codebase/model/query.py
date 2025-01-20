@@ -36,10 +36,13 @@ def insert_all(items, db_engine: Engine):
             db_session.flush()
 
 
-def update_existing(item, db_engine: Engine):
+def update_existing_items(items, db_engine: Engine):
     with Session(db_engine, expire_on_commit=False) as db_session:
         with db_session.begin():            
-            db_session.merge(item)
+            
+            for item in items:
+                db_session.merge(item)
+            
             db_session.flush()
 
 # new_session.merge(my_obj)

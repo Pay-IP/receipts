@@ -254,6 +254,27 @@ services:
     # logging:
     #   driver: "none"
 
+  platform_matching:
+    container_name: ${PLATFORM_MATCHING_HOST}
+    image: platform_matching:latest
+    restart: always
+    env_file:
+      - ./dev.env
+    expose:
+      - "${PLATFORM_MATCHING_PORT}"
+    networks:
+      - receipt_network
+    depends_on:
+      - log
+      - queue
+      - write_model
+      - read_model     
+      - migration
+    volumes:
+      - ./codebase:/application
+    # logging:
+    #   driver: "none"
+
   trigger:
     container_name: ${TRIGGER_HOST}
     image: trigger:latest
