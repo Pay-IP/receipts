@@ -17,7 +17,7 @@ def select_all_on_filters(TModel, filters: dict, engine: Engine) -> list:
 
 def select_first_on_filters(TModel, filters: dict, engine: Engine) -> list:
     with Session(engine, expire_on_commit=False) as session:
-        return session.query(TModel).filter_by(**filters).all()[0]
+        return session.query(TModel).filter_by(**filters).first()
 
 def insert_one(item, db_engine: Engine):
     with Session(db_engine, expire_on_commit=False) as db_session:
@@ -36,7 +36,7 @@ def insert_all(items, db_engine: Engine):
             db_session.flush()
 
 
-def update_existing_items(items, db_engine: Engine):
+def update_items(items, db_engine: Engine):
     with Session(db_engine, expire_on_commit=False) as db_session:
         with db_session.begin():            
             

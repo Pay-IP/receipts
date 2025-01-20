@@ -49,3 +49,14 @@ class PlatformMerchantReceiptDTO(BaseModel):
     invoice_totals: PlatformReceiptTotals
 
     emv_receipt: PlatformEmvReceipt
+
+class PlatformReceiptForIssuingBank(BaseModel):
+
+    platform_merchant_id: UUID
+    platform_merchant_name: str
+    
+    invoice_datetime: str
+    invoice_currency: str
+    
+    invoice_lines: list[PlatformReceiptLine]
+    invoice_totals: PlatformReceiptTotals

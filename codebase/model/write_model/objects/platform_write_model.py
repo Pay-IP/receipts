@@ -92,7 +92,6 @@ class PlatformBankClientAccountPayment(WriteModelBase):
 
     system_timestamp = Column(DateTime(timezone=True), nullable=False)
 
-
     payment = Column(JSON, nullable=False)
 
     merchant_receipt_id = Column('merchant_receipt_id', ForeignKey('platform_merchant_receipt.id'), nullable=True)

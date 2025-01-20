@@ -31,6 +31,7 @@ class IssuingBankClientAccountDebit(WriteModelBase):
 
     id = Column(Integer, primary_key=True)    
     external_id = Column(UUID(as_uuid=True), nullable=False)
+    platform_payment_id = Column(UUID(as_uuid=True), nullable=False)
 
     client_account_id = Column('client_account_id', ForeignKey('issuing_bank_client_account.id'), nullable=False)
     client_account = relationship('IssuingBankClientAccount', lazy=False)
@@ -38,16 +39,8 @@ class IssuingBankClientAccountDebit(WriteModelBase):
     currency_amount = Column(Integer, nullable=False)
     timestamp = Column(DateTime(timezone=True), nullable=False) 
 
-    platform_receipt_id = Column('platform_receipt_id', ForeignKey('issuing_bank_platform_receipt.id'), nullable=True)
-    platform_receipt = relationship('IssuingBankPlatformReceipt', lazy=False)
+    platform_receipt_id = Column(UUID(as_uuid=True), nullable=False)
+    platform_receipt = Column(JSON, nullable=True)
 
     emv_rq = Column(JSON, nullable=False)
     emv_rsp = Column(JSON, nullable=False)
-
-class IssuingBankPlatformReceipt(WriteModelBase):
-    __tablename__ = 'issuing_bank_platform_receipt'
-
-    id = Column(Integer, primary_key=True)    
-    
-    platform_id = Column(UUID(as_uuid=True), nullable=False)
-    receipt = Column(JSON, nullable=False)

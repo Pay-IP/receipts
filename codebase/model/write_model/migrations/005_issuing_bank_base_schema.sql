@@ -23,27 +23,14 @@ CREATE TABLE issuing_bank_client_account (
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
--- issuing_bank_platform_receipt
-
-CREATE TABLE issuing_bank_platform_receipt (
-
-    id INTEGER GENERATED ALWAYS AS IDENTITY,
-        PRIMARY KEY(id),
-
-    platform_id UUID NOT NULL UNIQUE,
-
-    receipt VARCHAR NOT NULL
-);
-
--- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 -- issuing_bank_client_account_debit
 
 CREATE TABLE issuing_bank_client_account_debit (
 
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
-
     external_id UUID NOT NULL UNIQUE,
+    platform_payment_id UUID NULL UNIQUE,
 
     client_account_id INTEGER NOT NULL,
     CONSTRAINT fk_issuing_bank_client_account_debit_client_account_id
@@ -53,10 +40,8 @@ CREATE TABLE issuing_bank_client_account_debit (
     currency_amount INTEGER NOT NULL,
     timestamp TIMESTAMPTZ NOT NULL,
 
-    platform_receipt_id INTEGER NULL,
-    CONSTRAINT fk_issuing_bank_client_account_debit_platform_receipt_id
-        FOREIGN KEY(platform_receipt_id) 
-	    REFERENCES issuing_bank_platform_receipt(id),
+    platform_receipt_id UUID NULL,
+    platform_receipt JSON NULL,
 
     emv_rq JSON,
     emv_rsp JSON

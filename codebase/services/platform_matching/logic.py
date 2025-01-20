@@ -1,16 +1,16 @@
 import datetime
 from model.core.objects.endpoint import Endpoint, endpoint_from_url
-from model.query import select_all_on_filters, update_existing_items
+from model.query import select_all_on_filters, update_items
 from model.write_model.objects.emv import ISO8583_02x0_MsgPair, mask_pan
-from model.write_model.objects.platform_common import PlatformEmvReceipt, PlatformMerchantReceiptDTO
+from model.write_model.objects.platform_common import PlatformEmvReceipt, PlatformMerchantReceiptDTO, PlatformReceiptForIssuingBank
 from model.write_model.objects.platform_write_model import PlatformBankClientAccount, PlatformBankClientAccountPayment, PlatformMerchantReceipt
 import schedule
 import time
 
 from services.iss_bank_callback.client import IssuingBankCallbackClient
-from services.iss_bank_callback.rqrsp import PlatformPaymentMatchNotification
+from services.iss_bank_callback.rqrsp import PlatformPaymentMatchExternalNotification
 from services.merchant_pos_callback.client import MerchantPosCallbackClient
-from services.merchant_pos_callback.rqrsp import PlatformReceiptMatchNotification
+from services.merchant_pos_callback.rqrsp import PlatformReceiptMatchExternalNotification
 from util.service.service_config_base import ServiceConfig
 
 JOB_PERIOD_S = 1
@@ -81,29 +81,36 @@ def match_job(config: ServiceConfig):
 
                 payment.merchant_receipt_id = receipt.id
 
-                update_existing_items([receipt, payment], db_engine)
-
-                # notify bank via callback
+                update_items([receipt, payment], db_engine)
 
                 platform_bank_client_ac: PlatformBankClientAccount = payment.bank_client_ac 
 
                 IssuingBankCallbackClient(
                     endpoint_from_url(platform_bank_client_ac.bank.callback_url)
                 ).post(
-                    PlatformPaymentMatchNotification(
+                    PlatformPaymentMatchExternalNotification(
                         platform_payment_id=payment.external_id,
-                        platform_receipt_id=receipt.external_id
+                        platform_receipt_id=receipt.external_id,
+                        platform_receipt=PlatformReceiptForIssuingBank(
+
+                            platform_merchant_id = receipt.merchant.external_id,
+                            platform_merchant_name = receipt.merchant.name,
+
+                            invoice_datetime = receiptDTO.invoice_datetime,
+
+                            invoice_currency = receiptDTO.invoice_currency,
+                            invoice_lines = receiptDTO.invoice_lines,
+                            invoice_totals = receiptDTO.invoice_totals
+                        )
                     )
                 )
 
                 # mark payment closed (bank has been notified)
 
-                # notify merchant via callback
-
                 MerchantPosCallbackClient(
                     endpoint_from_url(receipt.merchant.callback_url)
                 ).post(
-                    PlatformReceiptMatchNotification(
+                    PlatformReceiptMatchExternalNotification(
                         platform_receipt_id=receipt.external_id,
                         platform_client_ac_id=platform_bank_client_ac.external_id
                     )
