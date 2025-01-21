@@ -1,9 +1,9 @@
 from util.calc import dec_str
-from model.logevent import BuyOrdersPageRequested
+from model.object_model.logevent import BuyOrdersPageRequested
 from sqlalchemy.sql.expression import desc
 from services.fetch_buy_orders.rqrsp import BuyOrderExport, BuyOrderPage
 from typing import List, Optional
-from model.orm.read_model import BuyOrderReadModel
+from model.object_model.read_model.read_model import BuyOrderReadModel
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 from sqlalchemy.engine.base import Engine

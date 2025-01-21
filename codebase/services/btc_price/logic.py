@@ -1,13 +1,14 @@
 from typing import Optional
-from model.common import SUPPORTED_CURRENCIES
+from model.object_model.common import SUPPORTED_CURRENCIES
 from datetime import datetime
 from fastapi import FastAPI
 from fastapi.exceptions import HTTPException
 
-from model.logevent import BtcPriceRequested, BtcPriceQuoted
+from model.object_model.logevent import BtcPriceRequested, BtcPriceQuoted
 from services.btc_price.rqrsp import GetBtcPriceQuoteResponse
 from util.coinbase import CoinBaseClient
 from util.structured_logging import log_event
+from util.web import serialize_datetime
 
 api = FastAPI()
 
@@ -49,7 +50,7 @@ def handle_request(client_id: int, currency: str):
     log_event(
         BtcPriceQuoted(
             source='coinbase',
-            timestamp=rsp.timestamp.isoformat(),
+            timestamp=serialize_datetime(rsp.timestamp),
             currency=rsp.currency,
             rate=rsp.rate
         )

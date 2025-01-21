@@ -1,11 +1,9 @@
-import traceback
+from model.core.objects.logevent import WaitedForMigrations, WaitingForMigrations
+from model.core.objects.endpoint import Endpoint
 from util.env import endpoint_from_env
 from util.web import http_get, url_for_endpoint
 import time
-from model.logevent import MigrationsServiceConnectionError, WaitedForMigrations, WaitingForMigrations
 from util.structured_logging import log_event
-from model.common import Endpoint
-import requests
 from util.web import url_for_endpoint
 
 class MigrationServiceClient:

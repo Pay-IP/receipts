@@ -1,14 +1,16 @@
-from model.orm.read_model import BuyOrderReadModel
+from model.core.objects.dto import BuyOrderDTO
+from model.core.objects.endpoint import QueueEndpoint
+from model.core.objects.logevent import BuyOrderReadModelSynced, FailedToSyncBuyOrderReadModel
+from model.core.objects.queue import PlatfortmEventQueue
+from model.read_model.objects.read_model_base import BuyOrderReadModel
 from sqlalchemy.orm import Session
 from typing import Optional
-from model.common import Queue, QueueEndpoint
 from util.db import get_tested_database_engine
 from util.env import database_endpoint_from_env, queue_endpoint_from_env
 from util.queue import connect_blocking_q_listener
 import traceback
+from util.service.service_config_base import ServiceConfig
 from util.structured_logging import log_event
-from model.logevent import BuyOrderReadModelSynced, FailedToSyncBuyOrderReadModel
-from model.dto import BuyOrderDTO
 
 
 def new_sync_buy_order(read_model_engine):   
@@ -50,10 +52,10 @@ def new_sync_buy_order(read_model_engine):
 
     return sync_buy_order
 
-def before_launching_rest_server():
+def before_launching_read_model_sync_server(config: ServiceConfig):
     
     read_model_engine = get_tested_database_engine(database_endpoint_from_env('READ_MODEL_DB'))
-    buy_order_q_ep: QueueEndpoint = queue_endpoint_from_env('Q', Queue.BuyOrder)
+    buy_order_q_ep: QueueEndpoint = queue_endpoint_from_env('Q', PlatfortmEventQueue.BuyOrder)
 
     def connect_event_listeners():
         connect_blocking_q_listener(buy_order_q_ep, new_sync_buy_order(read_model_engine))        

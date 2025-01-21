@@ -1,22 +1,20 @@
-from model.common import Service
-from services.iss_bank_callback.rqrsp import IssBankCallbackRequest
-from util.service_base import register_healthcheck_endpoint
-from util.structured_logging import configure_structured_logging
-from fastapi import FastAPI
-from util.service import request_handler
-from services.iss_bank_callback.logic import handle_iss_bank_callback_request
+from services.iss_bank_callback.rqrsp import PlatformPaymentMatchExternalNotification
+from util.service.service_base import ServiceDefinition, api_for_service_definition
+from util.service.service_base import request_handler
+from services.iss_bank_callback.logic import handle_callback_notification_from_platform
+from services.iss_bank_callback.definition import issuing_bank_callback_service_definition
 
 def api():
-    api = FastAPI()
-    configure_structured_logging(Service.ISS_BANK_CALLBACK)
 
-    register_healthcheck_endpoint(api)
+    definition: ServiceDefinition = issuing_bank_callback_service_definition()    
+    api = api_for_service_definition(definition)
 
     @api.post("/")
-    def callback(rq: IssBankCallbackRequest):
+    def callback(rq: PlatformPaymentMatchExternalNotification):
         return request_handler(
-            IssBankCallbackRequest,
-            handle_iss_bank_callback_request
+            definition,
+            PlatformPaymentMatchExternalNotification,
+            handle_callback_notification_from_platform
         )(rq)
 
     return api

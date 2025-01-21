@@ -1,10 +1,13 @@
 fastapi # asgi web server
 fluent-logger # event logging
+guid
 inflection # casing
 pika # rabbitmq
 psycopg2 # postgresql
 pydantic # models
 requests # http requests
+schedule
 sqlalchemy # orm
 uvicorn # asgi
 yoyo-migrations==8.2.0 # db migrations
+jinja2 # server-side templates

@@ -8,12 +8,12 @@ from sqlalchemy.engine.base import Engine
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from model.dto import BuyOrderDTO
+from model.object_model.dto import BuyOrderDTO
 from util.calc import calc_btc_amt_from_ccy_amount_and_btc_rate, configure_decimal_context, dec_str
 from util.structured_logging import log_event
 from services.create_buy_order.rqrsp import BuyOrderExport, CreateBuyOrderRequest, CreateBuyOrderResponse
-from model.orm.write_model import BuyOrder, BuyOrderIdempotenceCache, Currency
-from model.logevent import BtcPriceClientFailed, BuyOrderCreated, BuyOrderRequestIdempotenceCacheHit, CreateBuyOrderRequestReceived, CreateBuyOrderResponseReturned, ErrorRetrievingBuyOrderRequestViaIdempotenceCache, ModelUpdateFailed
+from model.object_model.write_model import BuyOrder, BuyOrderIdempotenceCache, Currency
+from model.object_model.logevent import BtcPriceClientFailed, BuyOrderCreated, BuyOrderRequestIdempotenceCacheHit, CreateBuyOrderRequestReceived, CreateBuyOrderResponseReturned, ErrorRetrievingBuyOrderRequestViaIdempotenceCache, ModelUpdateFailed
 
 write_engine: Optional[Engine] = None
 q_publisher: Optional[Callable] = None

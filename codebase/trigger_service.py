@@ -1,7 +1,7 @@
-from util.service_base import launch_uvicorn_server
-from model.common import Service
+from util.service.service_base import start_service
+from services.trigger.definition import trigger_service_definition
 
 if __name__ == '__main__':
-    launch_uvicorn_server(
-        service=Service.TRIGGER
+    start_service(
+        definition=trigger_service_definition()
     )

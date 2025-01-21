@@ -1,8 +1,5 @@
+from uuid import UUID
 from pydantic import BaseModel
 
-class PlatformNewReceiptRequest(BaseModel):
-    pass
-
-
-class PlatformNewReceiptResponse(BaseModel):
-    pass
+class PlatformReceiptResponse(BaseModel):
+    platform_receipt_id: UUID

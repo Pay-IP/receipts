@@ -1,6 +1,8 @@
+import datetime
+from uuid import UUID
 import requests
-from util.env import env_int, env_str
-from model.common import DatabaseEndPoint, Endpoint
+from model.core.objects.endpoint import Endpoint
+from util.env import env_int
 
 def url(protocol:str, host:str, port:str, path:str=None):
     root = f'{protocol}://{host}:{port}'
@@ -24,3 +26,11 @@ def http_post(
     return requests.post(url, timeout=timeout_s, json=json)
 
 
+def serialize_datetime(date: datetime.datetime) -> str:
+    return date.isoformat()
+
+def deserialize_datetime(date: str) -> datetime.datetime:
+    return datetime.datetime.fromisoformat(date)
+
+def serialize_uuid(uuid: UUID) -> str:
+    return uuid.hex

@@ -1,13 +1,13 @@
 import traceback
 from typing import Optional
-from model.common import DatabaseEndPoint
 import time
 
+from model.core.objects.endpoint import DatabaseEndPoint
+from model.core.objects.logevent import ConnectedToDatabase, FailedToConnectToDatabase
 from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import text
 
 from util.structured_logging import log_event
-from model.logevent import ConnectedToDatabase, FailedToConnectToDatabase
 
 def connection_string(port, host, database, user, password):
     return f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{database}'

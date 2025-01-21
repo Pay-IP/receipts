@@ -1,9 +1,9 @@
 from typing import Any, Callable, Optional
 
 from pika.adapters.blocking_connection import BlockingChannel, BlockingConnection
-from model.common import QueueEndpoint, Queue
+from model.core.objects.endpoint import QueueEndpoint
+from model.core.objects.logevent import QueueListenerFailedToConnect, QueueListenerStartingConsumption, QueuePublisherConnected, QueuePublisherFailedToConnect
 from util.structured_logging import log_event, log_exception
-from model.logevent import QueueListenerFailedToConnect, QueueListenerStartingConsumption, QueuePublisherConnected, QueuePublisherFailedToConnect
 from pydantic import BaseModel
 import pika
 import json

@@ -1,9 +1,12 @@
+from uuid import UUID
 from pydantic import BaseModel
 
-class IssBankCallbackRequest(BaseModel):
-    # TO DO: define request fields here
-    pass
+from model.write_model.objects.platform_common import PlatformReceiptForIssuingBank
 
-class IssBankCallbackResponse(BaseModel):
-    # TO DO: define response fields here
-    pass
+class PlatformPaymentMatchExternalNotification(BaseModel):
+    platform_payment_id: UUID
+    platform_receipt_id: UUID
+    platform_receipt: PlatformReceiptForIssuingBank
+
+class IssuingBankCallbackResponse(BaseModel):
+    ack: bool

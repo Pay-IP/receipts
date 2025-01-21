@@ -1,0 +1,9 @@
+from model.core.objects.service import Service
+from util.service.service_base import ServiceDefinition
+from util.service.service_config_base import default_service_config
+
+def merchant_pos_new_checkout_service_definition():
+    return ServiceDefinition(
+        service = Service.MERCHANT_POS_NEW_CHECKOUT,
+        config = default_service_config(),
+    )

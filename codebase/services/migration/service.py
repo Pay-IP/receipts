@@ -1,14 +1,10 @@
-from fastapi import FastAPI
-from model.common import Service
-from util.service_base import register_healthcheck_endpoint
-from util.structured_logging import configure_structured_logging
+from util.service.service_base import ServiceDefinition, api_for_service_definition
+from services.migration.definition import migration_service_definition
 
 
 def api():
 
-    api = FastAPI()
-    configure_structured_logging(Service.MIGRATION)
-
-    register_healthcheck_endpoint(api)
+    definition: ServiceDefinition = migration_service_definition()    
+    api = api_for_service_definition(definition)
     
     return api

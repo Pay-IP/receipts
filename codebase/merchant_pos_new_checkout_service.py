@@ -1,7 +1,7 @@
-from model.common import Service
-from util.service_base import launch_uvicorn_server
+from services.merchant_pos_new_checkout.definition import merchant_pos_new_checkout_service_definition
+from util.service.service_base import start_service
 
 if __name__ == '__main__':
-    launch_uvicorn_server(
-        service=Service.MERCHANT_POS_NEW_CHECKOUT,
+    start_service(
+        definition=merchant_pos_new_checkout_service_definition()
     )

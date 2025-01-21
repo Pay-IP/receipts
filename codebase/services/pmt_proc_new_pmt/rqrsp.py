@@ -1,16 +1,18 @@
-import datetime
-import uuid
+from uuid import UUID
 from pydantic import BaseModel
 
-from model.common import Currency
+from model.write_model.objects.emv import TerminalEmvReceipt
 
-class PaymentProcessorNewCustomerPaymentRequest(BaseModel):
-    currency: Currency
+class PaymentProcessorNewCardPaymentRequest(BaseModel):
+
+    currency: str
     currency_amt: int
+    merchant_reference: str
 
-class PaymentProcessorCustomerPaymentExport(BaseModel):
-    currency: Currency
-    currency_amt: int
 
-class PaymentProcessorNewCustomerPaymentResponse(BaseModel):
-    payment: PaymentProcessorCustomerPaymentExport
+class PaymentProcessorNewCardPaymentResponse(BaseModel):
+
+    successful: bool
+    payment_processor_payment_reference: UUID
+    terminal_emv_receipt: TerminalEmvReceipt 
+    
