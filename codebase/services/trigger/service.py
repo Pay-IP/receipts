@@ -1,4 +1,4 @@
-from services.trigger.rqrsp import TriggerRequest
+from services.trigger.rqrsp import NullRequest, TriggerRequest
 from util.service.service_base import ServiceDefinition, api_for_service_definition
 from util.service.service_base import request_handler
 from services.trigger.logic import handle_trigger_merchant_pos_new_checkout_request
@@ -16,5 +16,13 @@ def api():
             TriggerRequest, 
             handle_trigger_merchant_pos_new_checkout_request
         )(rq)
+    
+    @api.get("/")
+    def get_merchant_pos_new_checkout():
+        return request_handler(
+            definition,
+            NullRequest, 
+            handle_trigger_merchant_pos_new_checkout_request
+        )(None)
     
     return api

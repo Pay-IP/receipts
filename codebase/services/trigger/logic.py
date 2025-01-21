@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 
 from services.merchant_pos_new_checkout.client import MerchantPosNewCheckoutClient
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest, MerchantPosNewCheckoutRequestItem
-from services.trigger.rqrsp import TriggerRequest
+from services.trigger.rqrsp import NullRequest, TriggerRequest
 from util.service.service_config_base import ServiceConfig
 
 def random_merchant_pos_new_checkout_request(
@@ -52,6 +52,15 @@ def random_merchant_pos_new_checkout_request(
 def handle_trigger_merchant_pos_new_checkout_request(config: ServiceConfig, rq: TriggerRequest):
 
     merchant_pos_checkout_rq =  random_merchant_pos_new_checkout_request(
+        write_model_db_engine=config.write_model_db_engine()
+    )
+
+    return MerchantPosNewCheckoutClient().post(merchant_pos_checkout_rq)
+
+
+def handle_get_random_merchant_pos_new_checkout(config: ServiceConfig, rq: NullRequest):
+
+    merchant_pos_checkout_rq = random_merchant_pos_new_checkout_request(
         write_model_db_engine=config.write_model_db_engine()
     )
 

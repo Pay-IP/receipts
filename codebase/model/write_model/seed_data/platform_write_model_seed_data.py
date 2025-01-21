@@ -1,7 +1,4 @@
-import random
 import uuid
-from model.write_model.objects.currency import Currency
-from model.write_model.objects.payment_processor_write_model import PaymentProcessorMerchant
 from model.write_model.objects.platform_write_model import PlatformBank, PlatformBankConfig, PlatformMerchant, PlatformMerchantConfig
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
