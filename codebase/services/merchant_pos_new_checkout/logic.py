@@ -1,6 +1,6 @@
 import datetime
 import uuid
-from model.query import insert_all, insert_one, select_all, select_all_on_filters, select_on_id, update_items
+from model.query import insert_all, insert_one, select_all, select_all_on_filters, select_first_on_filters, select_on_id, update_items
 from model.write_model.objects.currency import Currency
 from model.write_model.objects.emv import TerminalEmvReceipt, mask_pan
 from model.write_model.objects.merchant_write_model import SKU, Invoice, InvoiceLine, InvoicePayment, InvoiceReceipt, PaymentProcessor
@@ -211,3 +211,10 @@ def handle_get_merchant_skus(
 ) -> list[SKU]:
     
     return select_all(SKU, config.write_model_db_engine())
+
+def handle_get_merchant_sku_by_id(
+    config: ServiceConfig,
+    id: int
+) -> SKU:
+
+    return select_first_on_filters(SKU, { 'id': id }, config.write_model_db_engine())

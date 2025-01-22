@@ -70,8 +70,22 @@ def handle_get_issuing_bank_client_accounts(
 
     return select_all(IssuingBankClientAccount, config.write_model_db_engine())
 
+def handle_get_issuing_bank_client_account_by_id(
+    config: ServiceConfig,
+    id: int
+) -> IssuingBankClientAccount:
+
+    return select_first_on_filters(IssuingBankClientAccount, { 'id': id }, config.write_model_db_engine())
+
 def handle_get_issuing_bank_client_account_debits(
     config: ServiceConfig,
 ) -> list[IssuingBankClientAccountDebit]:
     
     return select_all(IssuingBankClientAccountDebit, config.write_model_db_engine())
+
+def handle_get_issuing_bank_client_account_debit_by_id(
+    config: ServiceConfig,
+    id: int
+) -> IssuingBankClientAccountDebit:
+
+    return select_first_on_filters(IssuingBankClientAccountDebit, { 'id': id }, config.write_model_db_engine())

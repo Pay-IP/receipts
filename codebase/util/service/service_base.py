@@ -85,13 +85,15 @@ def request_handler(service_definition: ServiceDefinition, TRqModel, callback: C
         if (len(args) > 0):
             rq = args[0]     
 
-
         rsp = None
         try:
 
             if TRqModel is None:
 
-                rsp = callback(service_definition.config)
+                if rq is None:
+                    rsp = callback(service_definition.config)
+                else:
+                    rsp = callback(service_definition.config, rq)
 
                 log_event(ResponseReturnedLogEvent(
                     rsp_type=rsp.__class__.__name__,
