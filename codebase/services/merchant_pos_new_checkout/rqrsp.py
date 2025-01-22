@@ -5,6 +5,8 @@ class MerchantPosNewCheckoutRequestItem(BaseModel):
 
     sku_id: int
     sku_count: int
+    sku_name: str
+    sku_unit_price: int
 
 class MerchantPosNewCheckoutRequest(BaseModel):
 

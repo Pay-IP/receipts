@@ -36,7 +36,8 @@ def random_merchant_pos_new_checkout_request(
             MerchantPosNewCheckoutRequestItem(
                 sku_id = sku.id,
                 sku_count = sku_count,
-                # currency_amount = sku.price * sku_count
+                sku_name = sku.name,
+                sku_unit_price = sku.price
             )
         )
 
@@ -52,7 +53,7 @@ def handle_trigger_random_merchant_pos_new_checkout_request(
     config: ServiceConfig
 ):
 
-    merchant_pos_checkout_rq = random_merchant_pos_new_checkout_request(
+    merchant_pos_checkout_rq: MerchantPosNewCheckoutRequest = random_merchant_pos_new_checkout_request(
         write_model_db_engine=config.write_model_db_engine()
     )
 
