@@ -108,7 +108,7 @@ CREATE TABLE platform_merchant_receipt (
 	    REFERENCES platform_merchant(id),
 
     system_timestamp TIMESTAMPTZ NOT NULL,
-    receipt JSON,
+    receipt JSONB,
 
     is_matched BOOLEAN NOT NULL
 );
@@ -129,7 +129,7 @@ CREATE TABLE platform_bank_client_ac_payment (
 	    REFERENCES platform_bank_client_ac(id),
 
     system_timestamp TIMESTAMPTZ NOT NULL,
-    payment JSON,
+    payment JSONB,
 
     merchant_receipt_id INTEGER NULL
 );

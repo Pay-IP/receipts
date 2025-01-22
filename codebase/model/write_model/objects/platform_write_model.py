@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, DateTime, String, JSON, Boolean
+from sqlalchemy import Column, Integer, DateTime, String, Boolean
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.sql.schema import ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
@@ -77,7 +78,7 @@ class PlatformMerchantReceipt(WriteModelBase):
     merchant = relationship('PlatformMerchant', lazy=False)
 
     system_timestamp = Column(DateTime(timezone=True), nullable=False)
-    receipt = Column(JSON, nullable=False)
+    receipt = Column(JSONB, nullable=False)
 
     is_matched = Column(Boolean, unique=False, default=False, nullable=False)
 
@@ -93,7 +94,7 @@ class PlatformBankClientAccountPayment(WriteModelBase):
 
     system_timestamp = Column(DateTime(timezone=True), nullable=False)
 
-    payment = Column(JSON, nullable=False)
+    payment = Column(JSONB, nullable=False)
 
     merchant_receipt_id = Column('merchant_receipt_id', ForeignKey('platform_merchant_receipt.id'), nullable=True)
     merchant_receipt =  relationship('PlatformMerchantReceipt', lazy=True)

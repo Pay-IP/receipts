@@ -137,6 +137,8 @@ services:
       - ./dev.env
     expose:
       - "${ISS_BANK_NEW_PMT_PORT}"
+    ports:
+      - "${ISS_BANK_NEW_PMT_EXT_PORT}:${ISS_BANK_NEW_PMT_PORT}"
     networks:
       - receipt_network
     depends_on:

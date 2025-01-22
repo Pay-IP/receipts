@@ -67,14 +67,14 @@ def handle_issuing_bank_new_payment_request_from_payment_processor(
 
 def handle_get_issuing_bank_client_accounts(
     config: ServiceConfig,
-    rq: NullRequest
+    _: NullRequest
 ) -> list[IssuingBankClientAccount]:
 
     return select_all(IssuingBankClientAccount, config.write_model_db_engine())
 
 def handle_get_issuing_bank_client_account_debits(
     config: ServiceConfig,
-    rq: NullRequest
+    _: NullRequest
 ) -> list[IssuingBankClientAccountDebit]:
     
-        return select_all(IssuingBankClientAccount, config.write_model_db_engine())
+        return select_all(IssuingBankClientAccountDebit, config.write_model_db_engine())
