@@ -42,3 +42,46 @@
       - read_model
     logging:
       driver: "none"
+
+--------------------------------------
+
+  read_model:
+    container_name: ${READ_MODEL_DB_HOST}
+    image: read_model:latest
+    networks:
+      - receipt_network
+    environment:
+      POSTGRES_PASSWORD: ${READ_MODEL_POSTGRES_PASSWORD}
+      POSTGRES_USER: ${READ_MODEL_POSTGRES_USER}
+      POSTGRES_DB: ${READ_MODEL_POSTGRES_DB}
+    expose:
+      - "${READ_MODEL_DB_PORT}"
+    # ports:
+    # #   - "${READ_MODEL_DB_EXT_PORT}:${READ_MODEL_DB_PORT}"
+    logging:
+      driver: "none"
+    volumes:
+      - ./mapped_volumes/read_model/var_lib_postgresql_data:/var/lib/postgresql/data
+
+--------------------------------------
+
+  read_model_sync:
+    container_name: ${READ_MODEL_SYNC_HOST}
+    image: read_model_sync:latest
+    networks:
+      - receipt_network
+    expose:
+      - ${Q_PORT}
+    env_file:
+      - ./dev.env
+    depends_on:
+      - log
+      - queue
+      - read_model
+      - migration
+    # logging:
+    #   driver: "none"
+    volumes:
+      - ./codebase:/application
+
+

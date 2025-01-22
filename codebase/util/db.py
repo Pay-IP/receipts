@@ -15,7 +15,7 @@ def connection_string(port, host, database, user, password):
 def create_db_engine(ep: DatabaseEndPoint):
     return create_engine(connection_string(ep.port, ep.host, ep.database, ep.user, ep.pwd))
 
-def get_tested_database_engine(ep: DatabaseEndPoint):
+def get_test_database_engine(ep: DatabaseEndPoint):
     '''no retry if (retry_wait_s == 0)'''
 
     engine = create_db_engine(ep)

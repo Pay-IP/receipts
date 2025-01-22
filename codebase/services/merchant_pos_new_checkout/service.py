@@ -17,4 +17,15 @@ def api():
             handle_merchant_pos_new_checkout_request
         )(rq)
     
+    @api.get("/")
+    def checkout(rq: MerchantPosNewCheckoutRequest):
+        return request_handler(
+            definition,
+            MerchantPosNewCheckoutRequest, 
+            handle_merchant_pos_new_checkout_request
+        )(rq)
+
+
+
+
     return api

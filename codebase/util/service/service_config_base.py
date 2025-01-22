@@ -29,5 +29,6 @@ def default_service_config() -> ServiceConfig:
 
     return ServiceConfig(
         write_model_db_endpoint=database_endpoint_from_env('WRITE_MODEL_DB'),
-        read_model_db_endpoint=database_endpoint_from_env('READ_MODEL_DB')
+        read_model_db_endpoint=None
+        # read_model_db_endpoint=database_endpoint_from_env('READ_MODEL_DB')
     )

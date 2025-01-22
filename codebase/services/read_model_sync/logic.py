@@ -5,7 +5,7 @@ from model.core.objects.queue import PlatfortmEventQueue
 from model.read_model.objects.read_model_base import BuyOrderReadModel
 from sqlalchemy.orm import Session
 from typing import Optional
-from util.db import get_tested_database_engine
+from util.db import get_test_database_engine
 from util.env import database_endpoint_from_env, queue_endpoint_from_env
 from util.queue import connect_blocking_q_listener
 import traceback
@@ -54,7 +54,7 @@ def new_sync_buy_order(read_model_engine):
 
 def before_launching_read_model_sync_server(config: ServiceConfig):
     
-    read_model_engine = get_tested_database_engine(database_endpoint_from_env('READ_MODEL_DB'))
+    read_model_engine = get_test_database_engine(database_endpoint_from_env('READ_MODEL_DB'))
     buy_order_q_ep: QueueEndpoint = queue_endpoint_from_env('Q', PlatfortmEventQueue.BuyOrder)
 
     def connect_event_listeners():

@@ -1,11 +1,12 @@
 import datetime
 import uuid
-from model.query import insert_one, select_first_on_filters, update_items
+from model.query import insert_one, select_all, select_first_on_filters, update_items
 from model.write_model.objects.emv import ISO8583_0200_FinReqMsg, ISO8583_0210_FinRspMsg, ISO8583_02x0_MsgPair, random_auth_rsp_id
 from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccount, IssuingBankClientAccountDebit
 from services.iss_bank_new_pmt.rqrsp import IssuingBankNewCardPaymentRequest, IssuingBankNewCardPaymentResponse
 from services.platform_new_pmt.client import PlatformNewPaymentClient
 from services.platform_new_pmt.rqrsp import PlatformNewPaymentRequest, PlatformNewPaymentResponse
+from services.trigger.rqrsp import NullRequest
 from util.service.service_config_base import ServiceConfig
 
 def authorize_customer_account_payment_request(db_engine, emv_req: ISO8583_0200_FinReqMsg) -> tuple[IssuingBankClientAccount, IssuingBankClientAccountDebit, ISO8583_0210_FinRspMsg]:
@@ -63,3 +64,17 @@ def handle_issuing_bank_new_payment_request_from_payment_processor(
     return IssuingBankNewCardPaymentResponse(
         iso_0200_fin_rsp = iso_0210_fin_rsp
     )
+
+def handle_get_issuing_bank_client_accounts(
+    config: ServiceConfig,
+    rq: NullRequest
+) -> list[IssuingBankClientAccount]:
+
+    return select_all(IssuingBankClientAccount, config.write_model_db_engine())
+
+def handle_get_issuing_bank_client_account_debits(
+    config: ServiceConfig,
+    rq: NullRequest
+) -> list[IssuingBankClientAccountDebit]:
+    
+        return select_all(IssuingBankClientAccount, config.write_model_db_engine())
