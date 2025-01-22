@@ -74,6 +74,8 @@ services:
       - ./dev.env
     expose:
       - "${MERCHANT_POS_NEW_CHECKOUT_PORT}"
+    ports:
+      - "${MERCHANT_POS_NEW_CHECKOUT_EXT_PORT}:${MERCHANT_POS_NEW_CHECKOUT_PORT}"
     networks:
       - receipt_network
     depends_on:

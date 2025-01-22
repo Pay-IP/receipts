@@ -188,8 +188,7 @@ def create_receipt_for_invoice_and_submit_to_platform(
 
     return True
 
-def handle_merchant_pos_new_checkout_request(
-        
+def handle_merchant_pos_new_checkout_request( 
     config: ServiceConfig, 
     rq: MerchantPosNewCheckoutRequest
 ):
@@ -203,3 +202,12 @@ def handle_merchant_pos_new_checkout_request(
     return MerchantPosNewCheckoutResponse(
         successful=invoice_payment.successful
     )
+
+# these methods are here for convenience for internal testing
+# NOT FOR PRODUCTION USE - move to dedicated microservice
+
+def handle_get_merchant_skus(
+    config: ServiceConfig
+) -> list[SKU]:
+    
+    return select_all(SKU, config.write_model_db_engine())

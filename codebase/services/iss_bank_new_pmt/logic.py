@@ -6,7 +6,6 @@ from model.write_model.objects.issuing_bank_write_model import IssuingBankClient
 from services.iss_bank_new_pmt.rqrsp import IssuingBankNewCardPaymentRequest, IssuingBankNewCardPaymentResponse
 from services.platform_new_pmt.client import PlatformNewPaymentClient
 from services.platform_new_pmt.rqrsp import PlatformNewPaymentRequest, PlatformNewPaymentResponse
-from services.trigger.rqrsp import NullRequest
 from util.service.service_config_base import ServiceConfig
 
 def authorize_customer_account_payment_request(db_engine, emv_req: ISO8583_0200_FinReqMsg) -> tuple[IssuingBankClientAccount, IssuingBankClientAccountDebit, ISO8583_0210_FinRspMsg]:
@@ -67,14 +66,12 @@ def handle_issuing_bank_new_payment_request_from_payment_processor(
 
 def handle_get_issuing_bank_client_accounts(
     config: ServiceConfig,
-    _: NullRequest
 ) -> list[IssuingBankClientAccount]:
 
     return select_all(IssuingBankClientAccount, config.write_model_db_engine())
 
 def handle_get_issuing_bank_client_account_debits(
     config: ServiceConfig,
-    _: NullRequest
 ) -> list[IssuingBankClientAccountDebit]:
     
-        return select_all(IssuingBankClientAccountDebit, config.write_model_db_engine())
+    return select_all(IssuingBankClientAccountDebit, config.write_model_db_engine())

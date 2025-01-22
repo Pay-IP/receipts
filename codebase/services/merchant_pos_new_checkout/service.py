@@ -1,7 +1,7 @@
 from util.service.service_base import ServiceDefinition, api_for_service_definition
 from services.merchant_pos_new_checkout.rqrsp import MerchantPosNewCheckoutRequest
 from util.service.service_base import request_handler
-from services.merchant_pos_new_checkout.logic import handle_merchant_pos_new_checkout_request
+from services.merchant_pos_new_checkout.logic import handle_get_merchant_skus, handle_merchant_pos_new_checkout_request
 from services.merchant_pos_new_checkout.definition import merchant_pos_new_checkout_service_definition
 
 def api():
@@ -17,15 +17,15 @@ def api():
             handle_merchant_pos_new_checkout_request
         )(rq)
     
-    @api.get("/")
-    def checkout(rq: MerchantPosNewCheckoutRequest):
+    # these methods are here for convenience for internal testing
+    # NOT FOR PRODUCTION USE - move to dedicated microservice
+
+    @api.get("/skus")
+    def get_merchant_skus():
         return request_handler(
             definition,
-            MerchantPosNewCheckoutRequest, 
-            handle_merchant_pos_new_checkout_request
-        )(rq)
-
-
-
+            None, 
+            handle_get_merchant_skus
+        )()
 
     return api

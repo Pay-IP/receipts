@@ -5,15 +5,16 @@ get_resource_from_localhost_port() {
   
   RESOURCE="$1"
   PORT=$2
+  URL="http://localhost:${PORT}/${RESOURCE}"
 
   echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
-  echo "GET RESOURCE $RESOURCE"
+  echo "GET RESOURCE $RESOURCE from $URL"
   echo
 
   curl -s \
       -H "Content-Type: application/json" \
       -d '{}' \
-      -X GET http://localhost:${PORT}/${RESOURCE} | jq .
+      -X GET $URL | jq .
 
   echo
   echo
@@ -22,7 +23,7 @@ get_resource_from_localhost_port() {
 
 # -----------------------------------------------------------------------------------------------
 
-iss_bank_port=55001
+get_resource_from_localhost_port "client_accounts" $ISS_BANK_NEW_PMT_EXT_PORT
+get_resource_from_localhost_port "client_account_debits" $ISS_BANK_NEW_PMT_EXT_PORT
 
-get_resource_from_localhost_port "issuing_bank_client_accounts" $iss_bank_port
-get_resource_from_localhost_port "issuing_bank_client_account_debits" $iss_bank_port
+get_resource_from_localhost_port "skus" $MERCHANT_POS_NEW_CHECKOUT_EXT_PORT
