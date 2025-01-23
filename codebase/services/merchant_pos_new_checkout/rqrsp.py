@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import UUID
 from pydantic import BaseModel
 
 class MerchantPosNewCheckoutRequestItem(BaseModel):
@@ -10,9 +11,9 @@ class MerchantPosNewCheckoutRequestItem(BaseModel):
 
 class MerchantPosNewCheckoutRequest(BaseModel):
 
-    client_id: Optional[int] = None    
     items: list[MerchantPosNewCheckoutRequestItem]
     currency: str
 
 class MerchantPosNewCheckoutResponse(BaseModel):
     successful: bool
+    platform_receipt_id: UUID

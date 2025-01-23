@@ -20,7 +20,6 @@ get_resource_from_localhost_port() {
   echo
 }
 
-
 # -----------------------------------------------------------------------------------------------
 
 get_resource_from_localhost_port "client_accounts" $ISS_BANK_NEW_PMT_EXT_PORT
@@ -31,3 +30,4 @@ get_resource_from_localhost_port "client_account_debit/1" $ISS_BANK_NEW_PMT_EXT_
 
 get_resource_from_localhost_port "skus" $MERCHANT_POS_NEW_CHECKOUT_EXT_PORT
 get_resource_from_localhost_port "sku/1" $MERCHANT_POS_NEW_CHECKOUT_EXT_PORT
+get_resource_from_localhost_port "random_merchant_pos_new_checkout_request" $MERCHANT_POS_NEW_CHECKOUT_EXT_PORT

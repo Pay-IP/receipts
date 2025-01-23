@@ -1,5 +1,9 @@
 import datetime
+import random
 import uuid
+from model.write_model.objects.merchant_write_model import SKU
+from sqlalchemy.engine.base import Engine
+from sqlalchemy.orm import Session
 from model.query import insert_all, insert_one, select_all, select_all_on_filters, select_first_on_filters, select_on_id, update_items
 from model.write_model.objects.currency import Currency
 from model.write_model.objects.emv import TerminalEmvReceipt, mask_pan
@@ -132,7 +136,7 @@ def platform_emv_receipt_from_terminal_emv_receipt(
 
     )
 
-def create_receipt_for_invoice_and_submit_to_platform(
+def create_and_submit_platform_receipt_for_invoice(
     db_engine, 
     invoice_id: int
 ):
@@ -186,7 +190,47 @@ def create_receipt_for_invoice_and_submit_to_platform(
     receipt.platform_receipt_id = platform_receipt_rsp.platform_receipt_id
     update_items([receipt], db_engine)
 
-    return True
+    return receipt.platform_receipt_id
+
+def random_merchant_pos_new_checkout_request(
+    write_model_db_engine: Engine,
+    max_count_per_sku = 3,
+    sales_tax_percent = 14.0
+) -> MerchantPosNewCheckoutRequest:
+    
+    currencies: list[Currency] = None
+    skus: list[SKU] = None
+
+    # Example query
+    # user = session.query(User).filter(User.email == "john.doe@example.com").first()
+
+    with Session(write_model_db_engine) as session:
+
+        currencies = session.query(Currency).all()
+        skus = session.query(SKU).all()
+
+    lines = []
+
+    for sku in random.sample(skus, random.randint(1, len(skus))):
+
+        sku_count = random.randint(1, max_count_per_sku)
+
+        lines.append(
+            MerchantPosNewCheckoutRequestItem(
+                sku_id = sku.id,
+                sku_count = sku_count,
+                sku_name = sku.name,
+                sku_unit_price = sku.price
+            )
+        )
+
+    currency = random.sample(currencies, 1)[0] 
+
+    return MerchantPosNewCheckoutRequest(
+        items = lines,
+        currency = currency.iso3,
+    )
+
 
 def handle_merchant_pos_new_checkout_request( 
     config: ServiceConfig, 
@@ -197,13 +241,20 @@ def handle_merchant_pos_new_checkout_request(
 
     invoice = construct_and_persist_core_invoice(db_engine, rq.currency, rq.items)
     invoice_payment = execute_invoice_payment(db_engine, invoice)
-    create_receipt_for_invoice_and_submit_to_platform(db_engine, invoice.id)
+    platform_receipt_id = create_and_submit_platform_receipt_for_invoice(db_engine, invoice.id)
 
     return MerchantPosNewCheckoutResponse(
-        successful=invoice_payment.successful
+        successful=invoice_payment.successful,
+        platform_receipt_id=platform_receipt_id
     )
 
 # these methods are here for convenience for internal testing
+
+def handle_get_random_merchant_pos_new_checkout_request(
+    config: ServiceConfig
+):
+    return random_merchant_pos_new_checkout_request(config.write_model_db_engine())
+
 # NOT FOR PRODUCTION USE - move to dedicated microservice
 
 def handle_get_merchant_skus(
