@@ -41,8 +41,8 @@ CREATE TABLE issuing_bank_client_account_debit (
     timestamp TIMESTAMPTZ NOT NULL,
 
     platform_receipt_id UUID NULL,
-    platform_receipt JSON NULL,
+    platform_receipt JSONB NULL,
 
-    emv_rq JSON,
-    emv_rsp JSON
+    emv_rq JSONB,
+    emv_rsp JSONB
 );

@@ -1,7 +1,7 @@
 import datetime
 import random
 import uuid
-from model.query import insert_one, select_all, select_on_id
+from model.query import insert_one, select_all, select_first_on_filters, select_on_id
 from model.write_model.objects.emv import ISO8583_0200_FinReqMsg, ISO8583_02x0_MsgPair, TerminalEmvReceipt, formatted_terminal_serial_number, formatted_transaction_date, formatted_transaction_time, formatted_system_trace_audit_number, random_emv_CTQ, random_emv_application_cryptogram, formatted_retrieval_reference_number, random_terminal_verification_results, formatted_unique_transaction_identifier
 from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccount
 from model.write_model.objects.payment_processor_write_model import PaymentProcessorMerchant, PaymentProcessorMerchantTSN, PaymentProcessorSystemTraceAuditNumber
@@ -21,7 +21,18 @@ def handle_new_card_payment_request_from_merchant_pos(
     
     # this would normally happen out-of-band
     #
-    issuing_bank_client_ac = random.sample(select_all(IssuingBankClientAccount, db_engine), 1)[0]
+    issuing_bank_client_ac = None
+    match rq.card_PAN_for_demo:
+        case None:
+            issuing_bank_client_ac = random.sample(select_all(IssuingBankClientAccount, db_engine), 1)[0]          
+        case _:
+            issuing_bank_client_ac = select_first_on_filters(
+                IssuingBankClientAccount, 
+                {
+                    'card_pan': rq.card_PAN_for_demo
+                },
+                config.write_model_db_engine()
+                )
 
     merchant_tsn =  PaymentProcessorMerchantTSN(merchant_id = merchant.id)
     merchant_tsn = insert_one(merchant_tsn, db_engine)

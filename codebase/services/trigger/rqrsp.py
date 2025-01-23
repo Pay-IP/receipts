@@ -1,11 +1,4 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
-
-class NullRequest(BaseModel):
-    pass
-
-class TriggerRequest(BaseModel):
-    pass
-
-class TriggerResponse(BaseModel):
+class StringResponse(BaseModel):
     rsp: str

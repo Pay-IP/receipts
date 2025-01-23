@@ -1,3 +1,4 @@
+from typing import Optional
 from uuid import UUID
 from pydantic import BaseModel
 
@@ -7,7 +8,8 @@ class PaymentProcessorNewCardPaymentRequest(BaseModel):
 
     currency: str
     currency_amt: int
-    merchant_reference: str
+    merchant_payment_id: UUID
+    card_PAN_for_demo: Optional[str]
 
 
 class PaymentProcessorNewCardPaymentResponse(BaseModel):

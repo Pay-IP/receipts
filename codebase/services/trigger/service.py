@@ -1,7 +1,6 @@
-from services.trigger.rqrsp import NullRequest, TriggerRequest
 from util.service.service_base import ServiceDefinition, api_for_service_definition
 from util.service.service_base import request_handler
-from services.trigger.logic import handle_trigger_merchant_pos_new_checkout_request
+from services.trigger.logic import handle_trigger_random_merchant_pos_new_checkout_request
 from services.trigger.definition import trigger_service_definition
 
 def api():
@@ -10,19 +9,11 @@ def api():
     api = api_for_service_definition(definition)
     
     @api.post("/merchant_pos_new_checkout")
-    def merchant_pos_new_checkout(rq: TriggerRequest):
+    def merchant_pos_new_checkout():
         return request_handler(
             definition,
-            TriggerRequest, 
-            handle_trigger_merchant_pos_new_checkout_request
-        )(rq)
-    
-    @api.get("/")
-    def get_merchant_pos_new_checkout():
-        return request_handler(
-            definition,
-            NullRequest, 
-            handle_trigger_merchant_pos_new_checkout_request
-        )(None)
-    
+            None, 
+            handle_trigger_random_merchant_pos_new_checkout_request
+        )()
+        
     return api

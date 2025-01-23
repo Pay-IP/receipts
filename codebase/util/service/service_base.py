@@ -81,22 +81,41 @@ def request_handler(service_definition: ServiceDefinition, TRqModel, callback: C
 
     def handle(*args):
         
-        rq = args[0]     
+        rq = None
+        if (len(args) > 0):
+            rq = args[0]     
 
+        rsp = None
         try:
-            log_event(RequestReceivedLogEvent(
-                rq_type=TRqModel.__name__,
-                rq=str(rq)
-            ))
 
-            rsp = callback(service_definition.config, rq)
+            if TRqModel is None:
 
-            log_event(ResponseReturnedLogEvent(
-                rsp_type=rsp.__class__.__name__,
-                rsp=str(rsp)
-            ))
+                if rq is None:
+                    rsp = callback(service_definition.config)
+                else:
+                    rsp = callback(service_definition.config, rq)
+
+                log_event(ResponseReturnedLogEvent(
+                    rsp_type=rsp.__class__.__name__,
+                    rsp=str(rsp)
+                ))
+
+            else:
+
+                log_event(RequestReceivedLogEvent(
+                    rq_type=TRqModel.__name__,
+                    rq=str(rq)
+                ))
+
+                rsp = callback(service_definition.config, rq)
+
+                log_event(ResponseReturnedLogEvent(
+                    rsp_type=rsp.__class__.__name__,
+                    rsp=str(rsp)
+                ))
 
             return rsp
+
         except:
             error_reference = uuid.uuid4()
             trace = traceback.format_exc()
