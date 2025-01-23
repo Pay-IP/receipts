@@ -1,6 +1,7 @@
 import datetime
 import random
 import uuid
+from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccount
 from model.write_model.objects.merchant_write_model import SKU
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
@@ -228,10 +229,13 @@ def random_merchant_pos_new_checkout_request(
 
     currency = random.sample(currencies, 1)[0] 
 
+    # !! for demo purposes only
+    issuing_bank_client_ac = random.sample(select_all(IssuingBankClientAccount, write_model_db_engine), 1)[0]  
+
     return MerchantPosNewCheckoutRequest(
         items = lines,
         currency = currency.iso3,
-        card_pan_for_demo=None
+        card_pan_for_demo=issuing_bank_client_ac.card_pan
     )
 
 
