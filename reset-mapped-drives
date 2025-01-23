@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-. docker-stop
-
-sudo rm -rf mapped_volumes/write_model/var_lib_postgresql_data
-sudo rm -rf mapped_volumes/read_model/var_lib_postgresql_data
-
-. docker-restart

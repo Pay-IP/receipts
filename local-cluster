@@ -1,0 +1,199 @@
+#!/usr/bin/env bash
+
+OPTION=$1
+
+ROOT="docker/services"
+
+BASE_IMAGES=(\
+"database" \
+"log" \
+"queue" \
+"common" \
+)
+
+RUN_IMAGES=("write_model" \
+"read_model" \
+"log" \
+"queue" \
+"read_model_sync" \
+"migration" \
+"merchant_pos_new_checkout" \
+"merchant_pos_callback" \
+"platform_new_pmt" \
+"platform_new_receipt" \
+"platform_matching" \
+"pmt_proc_new_pmt" \
+"iss_bank_new_pmt" \
+"iss_bank_callback" \
+"trigger"\
+)
+
+load_environment_variables() {
+  
+  export $(cat dev.env | xargs)
+}
+
+build_base_images() {
+
+  # BUILD_OPTIONS="--no-cache"
+  BUILD_OPTIONS=""
+
+  for service in "${BASE_IMAGES[@]}"; do
+    echo "-------------------------------------------------------------------------------------"
+    tag="$service-base:latest"
+    dockerfile_path="$ROOT/$service/Dockerfile.base"
+    echo "building $tag from $dockerfile_path ..."
+    docker build -t $tag -f $dockerfile_path $BUILD_OPTIONS .
+    echo "... built $tag"
+  done
+
+}
+
+build_run_images() {
+
+  # BUILD_OPTIONS="--no-cache"
+  BUILD_OPTIONS=""
+
+  for service in "${RUN_IMAGES[@]}"; do
+    tag="$service:latest"
+    dockerfile_path="$ROOT/$service/Dockerfile"
+    echo "building $tag from $dockerfile_path ..."
+    docker build -t $tag -f $dockerfile_path $BUILD_OPTIONS .
+    echo "... built $tag"
+  done
+
+}
+
+build_cluster() {
+  
+  build_base_images
+  build_run_images
+}
+
+start_local_cluster() {
+
+  export $(cat dev.env | xargs) &&  docker-compose -f docker-compose.yml --env-file dev.env up --remove-orphan
+}
+
+stop_local_cluster() {
+
+  export $(cat dev.env | xargs) &&  docker-compose -f docker-compose.yml --env-file dev.env down --remove-orphan
+}
+
+restart_local_cluster() {
+
+  export $(cat dev.env | xargs) &&  docker-compose restart
+}
+
+nuke_local_cluster() {
+
+  stop_local_cluster
+  
+  docker system prune -f
+  docker container prune -f
+  docker volume prune -f
+  docker network prune -f
+}
+
+local_container_shell() {
+
+  container=$1
+  docker exec -it $container bash
+}
+
+reset_locally_mapped_volumes() {
+  
+  stop_local_cluster
+
+  sudo rm -rf mapped_volumes/write_model/var_lib_postgresql_data
+  sudo rm -rf mapped_volumes/read_model/var_lib_postgresql_data
+
+  start_local_cluster
+}
+
+trigger_random_transaction () {
+  
+  curl \
+        -H "Content-Type: application/json" \
+        -d '{}' \
+        -X POST ${TRIGGER_PROTOCOL}://localhost:${TRIGGER_EXT_PORT}/merchant_pos_new_checkout
+
+  echo
+}
+
+get_resource_from_localhost_port() {
+  
+  RESOURCE="$1"
+  PORT=$2
+  URL="http://localhost:${PORT}/${RESOURCE}"
+
+  echo "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"
+  echo "GET RESOURCE $RESOURCE from $URL"
+  echo
+
+  curl -s \
+      -H "Content-Type: application/json" \
+      -d '{}' \
+      -X GET $URL | jq .
+
+  echo
+  echo
+}
+
+test_demo_resources() {
+
+  get_resource_from_localhost_port "client_accounts" $ISS_BANK_NEW_PMT_EXT_PORT
+  get_resource_from_localhost_port "client_account/1" $ISS_BANK_NEW_PMT_EXT_PORT
+
+  get_resource_from_localhost_port "client_account_debits" $ISS_BANK_NEW_PMT_EXT_PORT
+  get_resource_from_localhost_port "client_account_debit/1" $ISS_BANK_NEW_PMT_EXT_PORT
+
+  get_resource_from_localhost_port "skus" $MERCHANT_POS_NEW_CHECKOUT_EXT_PORT
+  get_resource_from_localhost_port "sku/1" $MERCHANT_POS_NEW_CHECKOUT_EXT_PORT
+  get_resource_from_localhost_port "random_merchant_pos_new_checkout_request" $MERCHANT_POS_NEW_CHECKOUT_EXT_PORT
+
+}
+
+
+# ------------------------
+
+load_environment_variables
+
+case $OPTION in
+    build-base-images)
+        build_base_images
+        ;;
+    build-run-images)
+        build_run_images
+        ;;
+    build)
+        build_cluster
+        ;;
+    up)
+        start_local_cluster
+        ;;
+    down)
+        stop_local_cluster
+        ;;
+    restart)
+        restart_local_cluster
+        ;;
+    nuke)
+        nuke_local_cluster
+        ;;
+    shell)
+        local_container_shell $2
+        ;;
+    reset-locally-mapped-volumes)
+        reset_locally_mapped_volumes
+        ;;
+    test-demo-resources)
+        test_demo_resources
+        ;;
+    test-transaction)
+        trigger_random_transaction
+        ;;
+    *)
+        echo "unknown"
+        ;;
+esac
