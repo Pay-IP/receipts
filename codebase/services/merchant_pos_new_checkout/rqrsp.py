@@ -13,6 +13,7 @@ class MerchantPosNewCheckoutRequest(BaseModel):
 
     items: list[MerchantPosNewCheckoutRequestItem]
     currency: str
+    card_pan_for_demo: Optional[str]
 
 class MerchantPosNewCheckoutResponse(BaseModel):
     successful: bool

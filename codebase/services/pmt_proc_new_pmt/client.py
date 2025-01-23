@@ -15,12 +15,14 @@ class PaymentProcessorNewPaymentClient(ServiceClientBase):
         currency: str, 
         currency_amt: int, 
         timestamp: datetime.datetime, 
-        reference: str
+        merchant_payment_id: str,
+        card_pan_for_demo: str = None
     ) -> PaymentProcessorNewCardPaymentResponse:
         return self.post(
             PaymentProcessorNewCardPaymentRequest(
                 currency=currency,
                 currency_amt=currency_amt,
                 invoice_timestamp=serialize_datetime(timestamp),
-                merchant_reference=reference
+                merchant_payment_id=merchant_payment_id,
+                card_PAN_for_demo=card_pan_for_demo
         ))

@@ -67,7 +67,8 @@ def construct_and_persist_core_invoice(
 
 def execute_invoice_payment(
     db_engine, 
-    invoice: Invoice
+    invoice: Invoice,
+    card_pan_for_demo: str = None
 ) -> InvoicePayment:
     
     payment_processor: PaymentProcessor = select_all(PaymentProcessor, db_engine)[0]
@@ -78,7 +79,8 @@ def execute_invoice_payment(
         currency=invoice.currency.iso3,
         currency_amt=invoice.total_amount_after_tax,
         timestamp=invoice.timestamp,
-        reference=serialize_uuid(merchant_unique_payment_reference)
+        merchant_payment_id=serialize_uuid(merchant_unique_payment_reference),
+        card_pan_for_demo=card_pan_for_demo
     )
 
     if not pmt_proc_rsp.successful:
@@ -229,6 +231,7 @@ def random_merchant_pos_new_checkout_request(
     return MerchantPosNewCheckoutRequest(
         items = lines,
         currency = currency.iso3,
+        card_pan_for_demo=None
     )
 
 
@@ -240,7 +243,7 @@ def handle_merchant_pos_new_checkout_request(
     db_engine = config.write_model_db_engine()
 
     invoice = construct_and_persist_core_invoice(db_engine, rq.currency, rq.items)
-    invoice_payment = execute_invoice_payment(db_engine, invoice)
+    invoice_payment = execute_invoice_payment(db_engine, invoice, card_pan_for_demo=rq.card_pan_for_demo)
     platform_receipt_id = create_and_submit_platform_receipt_for_invoice(db_engine, invoice.id)
 
     return MerchantPosNewCheckoutResponse(
