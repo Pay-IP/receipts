@@ -194,6 +194,6 @@ case $OPTION in
         trigger_random_transaction
         ;;
     *)
-        echo "unknown"
+        echo "unknown option $OPTION"
         ;;
 esac

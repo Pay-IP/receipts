@@ -22,7 +22,7 @@ def api():
     # NOT FOR PRODUCTION USE - move to dedicated microservice
 
     @api.get("/client_accounts")
-    def get_issuing_bank_client_accounts(id):
+    def get_issuing_bank_client_accounts():
         return request_handler(
             definition,
             None,
