@@ -72,12 +72,12 @@ build_cluster() {
 
 start_local_cluster() {
 
-  export $(cat dev.env | xargs) &&  docker-compose -f docker-compose.yml --env-file dev.env up --remove-orphan
+  export $(cat dev.env | xargs) &&  docker-compose -f docker-compose.yml --env-file dev.env up
 }
 
 stop_local_cluster() {
 
-  export $(cat dev.env | xargs) &&  docker-compose -f docker-compose.yml --env-file dev.env down --remove-orphan
+  export $(cat dev.env | xargs) &&  docker-compose -f docker-compose.yml --env-file dev.env down
 }
 
 restart_local_cluster() {
@@ -160,40 +160,52 @@ test_demo_resources() {
 load_environment_variables
 
 case $OPTION in
-    build-base-images)
+    # Builds the base docker images.
+    build-base-images) 
         build_base_images
         ;;
-    build-run-images)
+    # Builds the run docker images.
+    build-run-images)  
         build_run_images
         ;;
-    build)
+    # Builds all docker images (base and run).
+    build)             
         build_cluster
         ;;
-    up)
+    # Starts the local docker cluster.
+    up)                
         start_local_cluster
         ;;
-    down)
+    # Stops the local docker cluster.
+    down)              
         stop_local_cluster
         ;;
-    restart)
+    # Restarts the local docker cluster.
+    restart)           
         restart_local_cluster
         ;;
-    nuke)
+    # Stops and cleans up the local docker cluster (removes containers, volumes, networks).
+    nuke)              
         nuke_local_cluster
         ;;
-    shell)
+    # Opens a shell inside a specified docker container.
+    shell)             
         local_container_shell $2
         ;;
-    reset-locally-mapped-volumes)
+    # Resets the locally mapped volumes for write_model and read_model databases.
+    reset-locally-mapped-volumes) 
         reset_locally_mapped_volumes
         ;;
-    test-demo-resources)
+    # Tests demo resources by fetching them from the local cluster.
+    test-demo-resources) 
         test_demo_resources
         ;;
-    test-transaction)
+    # Triggers a random transaction.
+    test-transaction)    
         trigger_random_transaction
         ;;
-    *)
+    # Default case for unknown options.
+    *)                  
         echo "unknown option $OPTION"
         ;;
 esac
