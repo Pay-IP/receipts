@@ -6,7 +6,7 @@ CREATE TABLE issuing_bank_client_account (
     id INTEGER GENERATED ALWAYS AS IDENTITY,
         PRIMARY KEY(id),
 
-    name VARCHAR(254) NOT NULL UNIQUE,
+    name VARCHAR(254) NOT NULL,
     date_of_birth DATE NOT NULL,
     postal_code VARCHAR(254) NOT NULL,
 

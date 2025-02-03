@@ -7,3 +7,4 @@ sqlalchemy # orm
 psycopg2 # postgresql
 pika # rabbitmq
 inflection # casing
+faker # create 'fake' db items

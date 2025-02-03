@@ -11,3 +11,4 @@ sqlalchemy # orm
 uvicorn # asgi
 yoyo-migrations==8.2.0 # db migrations
 jinja2 # server-side templates
+faker # create 'fake' db items

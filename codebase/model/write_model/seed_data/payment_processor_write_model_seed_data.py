@@ -5,34 +5,43 @@ from model.write_model.objects.payment_processor_write_model import PaymentProce
 from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
+from faker import Faker
+
 
 def seed_payment_processor_merchants(db_engine: Engine):
-
     with Session(db_engine) as db_session:
-        with db_session.begin():         
-
-            existing_currencies = db_session.execute(
-                select(Currency)
-            ).scalars().all()
+        with db_session.begin():
+            existing_currencies = db_session.execute(select(Currency)).scalars().all()
 
             currency = random.sample(existing_currencies, 1)[0]
+            fake = Faker()
+            seed_merchants = []
+            for i in range(10):
+                seed_merchants.append(
+                    PaymentProcessorMerchant(
+                        currency_id=currency.id,
+                        name=fake.company(),
+                        address=fake.address(),
+                    )
+                )
 
-            seed_merchants = [
-                PaymentProcessorMerchant(
-                    currency_id = currency.id,
-                    name = 'Vaal Marina Supermarket',
-                    address = 'Vaal Marina Supermarket',
-                ),
-            ]
-
-            existing_merchants = db_session.execute(
-                select(PaymentProcessorMerchant)
-            ).scalars().all()
+            existing_merchants = (
+                db_session.execute(select(PaymentProcessorMerchant)).scalars().all()
+            )
 
             for seed_merchant in seed_merchants:
-                if len([existing_merchant for existing_merchant in existing_merchants if existing_merchant.name == seed_merchant.name]) == 0:
+                if (
+                    len(
+                        [
+                            existing_merchant
+                            for existing_merchant in existing_merchants
+                            if existing_merchant.name == seed_merchant.name
+                        ]
+                    )
+                    == 0
+                ):
                     db_session.add(seed_merchant)
-            
+
             db_session.flush()
 
 

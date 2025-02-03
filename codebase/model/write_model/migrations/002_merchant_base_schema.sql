@@ -30,7 +30,10 @@ CREATE TABLE merchant_sku (
         PRIMARY KEY(id),
 
     name VARCHAR(254) NOT NULL UNIQUE,
-    price INTEGER NOT NULL
+    price INTEGER NOT NULL,
+    additional_info VARCHAR(254) NOT NULL,
+    category VARCHAR(254) NOT NULL,
+    img VARCHAR(254) NOT NULL
 );
 
 -- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
