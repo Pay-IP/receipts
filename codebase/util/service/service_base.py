@@ -24,6 +24,7 @@ from typing import Callable
 from util.structured_logging import log_event
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+import debugpy
 
 
 @dataclass
@@ -45,6 +46,12 @@ def start_service(
     definition: ServiceDefinition,
 ):
     configure_structured_logging(definition.service)
+
+    # --- Move debugpy.listen() here, inside start_service ---
+    # Allow remote debugging and listen on all interfaces on port defined by SERVICE_PORT
+    debugpy.listen(("0.0.0.0", 5678))
+    print("Debugpy is listening on port 5678, waiting for debugger to attach...")
+
 
     if definition.wait_for_migrations:
         MigrationServiceClient.wait_until_ready()
@@ -80,7 +87,11 @@ def api_for_service_definition(definition: ServiceDefinition) -> FastAPI:
     register_healthcheck_endpoint(api)
     api.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost:5173", "http://localhost:5174"],  # Allows requests from your frontend port
+        allow_origins=[
+            "http://localhost:5173",
+            "http://localhost:5174",
+            "http://localhost:3000",
+        ],  # Allows requests from your frontend port
         allow_credentials=True,
         allow_methods=["*"],  # Allows all HTTP methods
         allow_headers=["*"],  # Allows all headers
