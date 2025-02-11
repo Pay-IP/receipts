@@ -174,9 +174,10 @@ def create_and_submit_platform_receipt_for_invoice(
         invoice_datetime = serialize_datetime(invoice.timestamp),
         invoice_currency = invoice.currency.iso3,
         invoice_lines = [PlatformReceiptLine(
-            description=line.sku.name,
+            name=line.sku.name,
             count=line.sku_count,
-            total_amount=line.currency_amount*line.sku_count
+            additional_info=line.sku.additional_info,
+            total_amount=line.currency_amount
         ) for line in invoice.lines],
         invoice_totals = PlatformReceiptTotals(
             total_amount_before_tax = invoice.total_amount_before_tax,

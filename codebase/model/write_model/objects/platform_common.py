@@ -3,8 +3,9 @@ from pydantic import BaseModel
 from uuid import UUID
 
 class PlatformReceiptLine(BaseModel):
-    description: str
+    name: str
     count: int
+    additional_info: str
     total_amount: int
 
 class PlatformReceiptTotals(BaseModel):
