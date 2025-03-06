@@ -2,11 +2,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Current File",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "integratedTerminal"
+            "name": "debug",
+            "type": "debugpy",
+            "request": "attach",
+            "port": 55503,
+            "host": "localhost",
+            "pathMappings": [
+                {
+                    "localRoot": "${workspaceFolder}/codebase",
+                    "remoteRoot": "/application"
+                }
+            ]
         }
     ]
 }

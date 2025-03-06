@@ -8,47 +8,56 @@ from sqlalchemy.engine.base import Engine
 from sqlalchemy.orm import Session
 from sqlalchemy.sql.expression import select
 import datetime
+from faker import Faker
+
 
 def seed_issuing_bank_client_accounts(db_engine: Engine):
-
     min_age = 18
     max_age = 65
-    
-    bin = '484795'
-    aid = 'A0000000031010'
-    application_label = 'Visa Debit'
+
+    bin = "484795"
+    aid = "A0000000031010"
+    application_label = "Visa Debit"
 
     currency = select_first_on_filters(
         Currency,
-        { 'iso3': 'ZAR' },
+        {"iso3": "ZAR"},
         db_engine,
     )
 
     with Session(db_engine) as db_session:
-        with db_session.begin():         
+        with db_session.begin():
+            fake = Faker()
 
-            seed_client_accounts = [
-                IssuingBankClientAccount(
-                    currency_id = currency.id,
-                    external_id = uuid.uuid4(),
-                    name = f'Client {i}',
-                    card_pan = random_card_pan_for_bin(bin),
-                    card_aid = aid,
-                    card_app_label = application_label,
-                    date_of_birth = (datetime.datetime.now() - datetime.timedelta(days=365*random.randint(min_age, max_age))).date(),
-                    postal_code=''.join(random.sample('0123456789', 6)),
-                ) for i,_ in enumerate(range(3))
-            ]
+            # Count existing client accounts
+            existing_account_count = db_session.query(IssuingBankClientAccount).count()
 
-            existing_client_accounts = db_session.execute(
-                select(IssuingBankClientAccount)
-            ).scalars().all()
+            if existing_account_count < 5:
+                # Calculate how many more accounts to seed
+                accounts_to_seed = 5 - existing_account_count
+                seed_client_accounts = []
 
-            for seed_ac in seed_client_accounts:
-                if len([existing_ac for existing_ac in existing_client_accounts if existing_ac.name == seed_ac.name]) == 0:
+                for _ in range(accounts_to_seed):  # Seed only the required number of accounts
+                    customer_name = fake.name()
+                    seed_account = IssuingBankClientAccount(
+                        currency_id=currency.id,
+                        external_id=uuid.uuid4(),
+                        name=customer_name,
+                        card_pan=random_card_pan_for_bin(bin),
+                        card_aid=aid,
+                        card_app_label=application_label,
+                        date_of_birth=(
+                            datetime.datetime.now()
+                            - datetime.timedelta(days=365 * random.randint(min_age, max_age))
+                        ).date(),
+                        postal_code="".join(random.sample("0123456789", 6)),
+                    )
+                    seed_client_accounts.append(seed_account)
+
+                for seed_ac in seed_client_accounts:
                     db_session.add(seed_ac)
-            
-            db_session.flush()
+
+                db_session.flush()
 
 
 def seed_issuing_bank_write_model(db_engine: Engine):

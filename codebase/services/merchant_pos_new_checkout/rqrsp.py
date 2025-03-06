@@ -3,14 +3,10 @@ from uuid import UUID
 from pydantic import BaseModel
 
 class MerchantPosNewCheckoutRequestItem(BaseModel):
-
     sku_id: int
     sku_count: int
-    sku_name: str
-    sku_unit_price: int
 
 class MerchantPosNewCheckoutRequest(BaseModel):
-
     items: list[MerchantPosNewCheckoutRequestItem]
     currency: str
     card_pan_for_demo: Optional[str]

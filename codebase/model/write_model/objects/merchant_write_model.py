@@ -25,6 +25,9 @@ class SKU(WriteModelBase):
     id = Column(Integer, primary_key=True)
     name = Column(String(254), nullable=False)
     price = Column(Integer, nullable=False)
+    additional_info = Column(String(254), nullable=True)
+    category = Column(String(254), nullable=True)
+    img = Column(String(254), nullable=True)
 
 class Invoice(WriteModelBase):
     __tablename__ = 'merchant_invoice'

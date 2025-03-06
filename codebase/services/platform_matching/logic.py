@@ -51,7 +51,7 @@ def match_job(config: ServiceConfig):
 
     for payment in unmatched_payments:
 
-        iso_msgs = ISO8583_02x0_MsgPair.parse_raw(payment.payment) # TODO rename to iso_msgs !!!
+        iso_msgs = ISO8583_02x0_MsgPair.model_validate(payment.payment)
 
         hpan = mask_pan(iso_msgs.rq.pan)
         currency_amt = iso_msgs.rq.currency_amount
@@ -63,7 +63,7 @@ def match_job(config: ServiceConfig):
         
         for receipt in unmatched_receipts:
 
-            receiptDTO = PlatformMerchantReceiptDTO.parse_raw(receipt.receipt)
+            receiptDTO = PlatformMerchantReceiptDTO.model_validate(receipt.receipt)
             merchant_emv_receipt: PlatformEmvReceipt = receiptDTO.emv_receipt
 
             if (

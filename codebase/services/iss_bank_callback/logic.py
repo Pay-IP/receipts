@@ -1,6 +1,7 @@
 from model.query import select_first_on_filters, update_items
 from model.write_model.objects.issuing_bank_write_model import IssuingBankClientAccountDebit
 from services.iss_bank_callback.rqrsp import PlatformPaymentMatchExternalNotification, IssuingBankCallbackResponse
+from util.format import convert_uuids
 from util.service.service_config_base import ServiceConfig
 
 def handle_callback_notification_from_platform(
@@ -19,7 +20,7 @@ def handle_callback_notification_from_platform(
     )
 
     client_ac_debit.platform_receipt_id = rq.platform_receipt_id,
-    client_ac_debit.platform_receipt = rq.platform_receipt.model_dump_json()
+    client_ac_debit.platform_receipt = convert_uuids(rq.platform_receipt.model_dump())
 
     update_items([client_ac_debit], db_engine)
 

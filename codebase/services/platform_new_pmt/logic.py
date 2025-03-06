@@ -42,7 +42,7 @@ def handle_new_payment_request_to_platform_from_customer_bank(
         bank_client_ac = bank_client_ac,
         bank_payment_id = rq.issuer_bank_payment_id,
         system_timestamp=datetime.datetime.now(),
-        payment=rq.iso_msgs.model_dump_json()
+        payment=rq.iso_msgs.model_dump()
     )
 
     payment = insert_one(payment, config.write_model_db_engine())
