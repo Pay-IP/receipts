@@ -141,6 +141,7 @@ services:
       - "${ISS_BANK_NEW_PMT_PORT}"
     ports:
       - "${ISS_BANK_NEW_PMT_EXT_PORT}:${ISS_BANK_NEW_PMT_PORT}"
+      - 55503:5678
     networks:
       - receipt_network
     depends_on:

@@ -11,14 +11,14 @@ def seed_platform_merchants(db_engine: Engine):
 
             seed_merchants = [
                 PlatformMerchant(
-                    name = 'Vaal Marina Supermarket',
+                    name = 'Game City Rosebank',
                     callback_url = 'http://merchant_pos_callback:8777',
                     external_id = uuid.uuid4()
                 ),
             ]
 
             seed_merchant_config = PlatformMerchantConfig(
-                merchant_address = 'Vaal Marina Supermarket',
+                merchant_address = 'Game City Rosebank',
                 merchant_categorisation_code = '5411',
             )
 
